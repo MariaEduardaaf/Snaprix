@@ -10,7 +10,11 @@
       "Bash(gh repo create:*)",
       "Bash(git push:*)",
       "Bash(mkdir:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(xcodebuild:*)",
+      "Bash(grep:*)",
+      "Bash(security find-identity:*)",
+      "Bash(xcrun altool:*)"
     ],
     "deny": []
   }
