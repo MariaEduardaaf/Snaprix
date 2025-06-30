@@ -1,0 +1,86 @@
+{
+  "gameTitle": "Snaprix",
+  "@gameTitle": {
+    "description": "The title of the game"
+  },
+  
+  "playButton": "🎮 PLAY",
+  "@playButton": {
+    "description": "Button to start playing the game"
+  },
+  
+  "gameOver": "💀 GAME OVER",
+  "@gameOver": {
+    "description": "Game over title"
+  },
+  
+  "statistics": "🏆 STATISTICS",
+  "@statistics": {
+    "description": "Statistics section title"
+  },
+  
+  "score": "💰 SCORE",
+  "@score": {
+    "description": "Player's score label"
+  },
+  
+  "level": "📊 LEVEL",
+  "@level": {
+    "description": "Player's level label"
+  },
+  
+  "lines": "📏 LINES",
+  "@lines": {
+    "description": "Lines cleared label"
+  },
+  
+  "playAgain": "🎮 PLAY AGAIN",
+  "@playAgain": {
+    "description": "Button to play again"
+  },
+  
+  "mainMenu": "🏠 MAIN MENU",
+  "@mainMenu": {
+    "description": "Button to return to main menu"
+  },
+  
+  "motivationalMessage": "Keep trying! 💪",
+  "@motivationalMessage": {
+    "description": "Motivational message shown on game over"
+  },
+  
+  "pause": "⏸️ PAUSE",
+  "@pause": {
+    "description": "Pause button text"
+  },
+  
+  "resume": "▶️ RESUME",
+  "@resume": {
+    "description": "Resume button text"
+  },
+  
+  "settings": "⚙️ SETTINGS",
+  "@settings": {
+    "description": "Settings button text"
+  },
+  
+  "paused": "Paused",
+  "@paused": {
+    "description": "Paused game title"
+  },
+  
+  "continueGame": "Continue",
+  "@continueGame": {
+    "description": "Continue button text"
+  },
+  
+  "restart": "Restart",
+  "@restart": {
+    "description": "Restart button text"
+  },
+  
+  "exitToMenu": "Exit to Menu",
+  "@exitToMenu": {
+    "description": "Exit to menu button text"
+  }
+}

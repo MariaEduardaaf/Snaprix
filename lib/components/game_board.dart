@@ -137,13 +137,64 @@ class GameBoard extends PositionComponent {
 class GridLines extends Component {
   @override
   void render(Canvas canvas) {
-    final paint = Paint()
-      ..color = Colors.grey.withOpacity(0.3)
-      ..strokeWidth = 1.0;
+    final boardRect = Rect.fromLTWH(
+      0, 
+      0, 
+      GameConstants.columns * GameConstants.cellSize, 
+      GameConstants.rows * GameConstants.cellSize
+    );
+    
+    // Fundo do tabuleiro com gradiente sutil
+    final backgroundGradient = LinearGradient(
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+      colors: [
+        const Color(0xFF0a0a0a),
+        const Color(0xFF1a1a1a),
+        const Color(0xFF0f0f0f),
+      ],
+      stops: const [0.0, 0.5, 1.0],
+    );
+    
+    final backgroundPaint = Paint()
+      ..shader = backgroundGradient.createShader(boardRect);
+    
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(boardRect, const Radius.circular(8)),
+      backgroundPaint,
+    );
+    
+    // Borda externa do tabuleiro com margem interna
+    final borderRect = Rect.fromLTWH(
+      2, 
+      2, 
+      GameConstants.columns * GameConstants.cellSize - 4, 
+      GameConstants.rows * GameConstants.cellSize - 4
+    );
+    
+    final borderPaint = Paint()
+      ..color = const Color(0xFF00FFFF).withValues(alpha: 0.6)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 3.0;
+    
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(borderRect, const Radius.circular(8)),
+      borderPaint,
+    );
+    
+    // Grid interno com estilo moderno
+    final gridPaint = Paint()
+      ..color = const Color(0xFF333333).withValues(alpha: 0.4)
+      ..strokeWidth = 0.5;
+    
+    final accentGridPaint = Paint()
+      ..color = const Color(0xFF00FFFF).withValues(alpha: 0.1)
+      ..strokeWidth = 0.8;
     
     // Linhas verticais
-    for (int col = 0; col <= GameConstants.columns; col++) {
+    for (int col = 1; col < GameConstants.columns; col++) {
       final x = col * GameConstants.cellSize;
+      final paint = (col % 5 == 0) ? accentGridPaint : gridPaint;
       canvas.drawLine(
         Offset(x, 0),
         Offset(x, GameConstants.rows * GameConstants.cellSize),
@@ -152,13 +203,27 @@ class GridLines extends Component {
     }
     
     // Linhas horizontais
-    for (int row = 0; row <= GameConstants.rows; row++) {
+    for (int row = 1; row < GameConstants.rows; row++) {
       final y = row * GameConstants.cellSize;
+      final paint = (row % 5 == 0) ? accentGridPaint : gridPaint;
       canvas.drawLine(
         Offset(0, y),
         Offset(GameConstants.columns * GameConstants.cellSize, y),
         paint,
       );
     }
+    
+    // Linhas de destaque a cada 5 células para melhor orientação
+    final highlightPaint = Paint()
+      ..color = const Color(0xFF00FFFF).withValues(alpha: 0.15)
+      ..strokeWidth = 1.2;
+    
+    // Linha central vertical
+    final centerX = (GameConstants.columns / 2).floor() * GameConstants.cellSize;
+    canvas.drawLine(
+      Offset(centerX, 0),
+      Offset(centerX, GameConstants.rows * GameConstants.cellSize),
+      highlightPaint,
+    );
   }
 }

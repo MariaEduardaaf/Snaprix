@@ -56,6 +56,9 @@ class TetrisGame extends FlameGame with HasKeyboardHandlerComponents, HasCollisi
     // Inicializa a matriz do tabuleiro vazia
     board = List.generate(rows, (_) => List.filled(columns, 0));
     
+    // Adiciona fundo animado do jogo
+    add(AnimatedBackground());
+    
     // Inicializa o sistema de áudio
     await initializeAudio();
     
@@ -63,14 +66,29 @@ class TetrisGame extends FlameGame with HasKeyboardHandlerComponents, HasCollisi
     gameBoard = GameBoard();
     hud = HudComponent();
     
-    // Centraliza o tabuleiro na tela, deixando espaço para o HUD superior
+    // Centraliza o tabuleiro com margens assimétricas
     final boardWidth = columns * cellSize;
     final boardHeight = rows * cellSize;
-    final hudHeight = size.y * 0.15; // Espaço para o HUD na parte superior
+    final hudHeight = size.y * 0.12; // Espaço para HUD superior
+    final adSpaceHeight = size.y * 0.12; // 12% da tela reservado para anúncios
+    final hudBoardMargin = 20.0; // Margem entre HUD e tabuleiro
+    final topBoardMargin = 350.0; // Margem superior de 350px
+    final bottomBoardMargin = 300.0; // Margem inferior aumentada
+    
+    // Calcula espaço disponível com margens assimétricas
+    final availableGameHeight = size.y - hudHeight - adSpaceHeight - hudBoardMargin - topBoardMargin - bottomBoardMargin;
+    final verticalOffset = hudHeight + hudBoardMargin + topBoardMargin + (availableGameHeight - boardHeight) / 2;
+    
+    // Centraliza horizontalmente com margem mínima
+    final horizontalOffset = (size.x - boardWidth) / 2;
+    
     gameBoard.position = Vector2(
-      (size.x - boardWidth) / 2,
-      hudHeight + (size.y - boardHeight - hudHeight) / 2,
+      horizontalOffset,
+      verticalOffset,
     );
+    
+    print('🎯 [SNAPRIX] Tabuleiro com margens assimétricas: ${gameBoard.position}, tamanho: ${boardWidth.toInt()}x${boardHeight.toInt()}');
+    print('📱 [SNAPRIX] Margens - HUD: ${hudBoardMargin}px, Superior: ${topBoardMargin}px, Inferior: ${bottomBoardMargin}px, Lateral: ${horizontalOffset.toInt()}px');
     
     add(gameBoard);
     add(hud);
@@ -88,17 +106,32 @@ class TetrisGame extends FlameGame with HasKeyboardHandlerComponents, HasCollisi
     final screenWidth = size.x;
     final screenHeight = size.y;
     
-    // Reserva espaço para HUD (aproximadamente 120px)
-    final availableHeight = screenHeight - 120;
-    final availableWidth = screenWidth * 0.8; // 80% da largura para o jogo
+    // Reserva mais espaço para diminuir o tabuleiro verticalmente
+    final hudSpace = 145; // Espaço para HUD superior
+    final adSpace = screenHeight * 0.15; // Aumentado para 15% para anúncios
+    final topBottomMargin = 60; // Margem superior e inferior aumentada para 60px
+    final safetyMargin = 40; // Margem de segurança aumentada para 40px
+    
+    final availableHeight = screenHeight - hudSpace - adSpace - (topBottomMargin * 2) - safetyMargin;
+    final availableWidth = screenWidth * 0.75; // Reduzido para 75% da largura - tabuleiro menor
     
     // Calcula baseado nas dimensões do tabuleiro
     final cellSizeByWidth = availableWidth / columns;
     final cellSizeByHeight = availableHeight / rows;
     
-    // Usa o menor para manter proporção
+    // Prioriza o aproveitamento máximo da tela
     cellSize = min(cellSizeByWidth, cellSizeByHeight);
-    cellSize = max(cellSize, 20.0); // Tamanho mínimo
+    
+    // Força uso da largura se for viável (dentro de uma margem razoável)
+    if (cellSizeByWidth >= cellSize * 0.9) {
+      cellSize = cellSizeByWidth;
+    }
+    
+    cellSize = max(cellSize, 30.0); // Tamanho mínimo generoso
+    
+    print('🎯 [SNAPRIX] Célula com margens: ${cellSize.toStringAsFixed(1)}px');
+    print('📱 [SNAPRIX] Tela: ${screenWidth.toInt()}x${screenHeight.toInt()}, Tabuleiro: ${(cellSize * columns).toInt()}x${(cellSize * rows).toInt()}');
+    print('📊 [SNAPRIX] Tabuleiro REDUZIDO - Superior/Inferior: ${topBottomMargin}px, Largura: 75%');
     
     // Atualiza constante global
     GameConstants.cellSize = cellSize;
@@ -634,5 +667,130 @@ class DragControllerComponent extends RectangleComponent with HasGameReference<T
     _dragStartPos = null;
     _wasDrag = false;
     return true;
+  }
+}
+
+// Fundo animado do jogo
+class AnimatedBackground extends Component with HasGameReference<TetrisGame> {
+  final List<BackgroundParticle> particles = [];
+  final Random _random = Random();
+  
+  @override
+  Future<void> onLoad() async {
+    // Cria partículas para o fundo
+    for (int i = 0; i < 30; i++) {
+      particles.add(BackgroundParticle(
+        position: Vector2(
+          _random.nextDouble() * game.size.x,
+          _random.nextDouble() * game.size.y,
+        ),
+        velocity: Vector2(
+          (_random.nextDouble() - 0.5) * 20,
+          (_random.nextDouble() - 0.5) * 20,
+        ),
+        size: _random.nextDouble() * 3 + 1,
+        color: Color.fromARGB(
+          (_random.nextInt(50) + 20),
+          _random.nextInt(100) + 50,
+          _random.nextInt(150) + 100,
+          _random.nextInt(200) + 55,
+        ),
+      ));
+    }
+  }
+  
+  @override
+  void update(double dt) {
+    super.update(dt);
+    
+    for (final particle in particles) {
+      particle.update(dt, game.size);
+    }
+  }
+  
+  @override
+  void render(Canvas canvas) {
+    // Fundo base com gradiente
+    final backgroundRect = Rect.fromLTWH(0, 0, game.size.x, game.size.y);
+    final backgroundGradient = LinearGradient(
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+      colors: [
+        const Color(0xFF000814),
+        const Color(0xFF001D3D),
+        const Color(0xFF003566),
+        const Color(0xFF001122),
+      ],
+      stops: const [0.0, 0.3, 0.7, 1.0],
+    );
+    
+    final backgroundPaint = Paint()
+      ..shader = backgroundGradient.createShader(backgroundRect);
+    
+    canvas.drawRect(backgroundRect, backgroundPaint);
+    
+    // Renderiza partículas
+    for (final particle in particles) {
+      particle.render(canvas);
+    }
+  }
+}
+
+// Partícula para o fundo animado
+class BackgroundParticle {
+  Vector2 position;
+  Vector2 velocity;
+  double size;
+  Color color;
+  double alpha = 1.0;
+  double rotation = 0.0;
+  
+  BackgroundParticle({
+    required this.position,
+    required this.velocity,
+    required this.size,
+    required this.color,
+  });
+  
+  void update(double dt, Vector2 screenSize) {
+    position += velocity * dt;
+    rotation += dt;
+    
+    // Envelhecimento da partícula
+    alpha = (alpha - dt * 0.1).clamp(0.0, 1.0);
+    
+    // Reposiciona se sair da tela
+    if (position.x < -size || position.x > screenSize.x + size ||
+        position.y < -size || position.y > screenSize.y + size) {
+      final random = Random();
+      position = Vector2(
+        random.nextDouble() * screenSize.x,
+        random.nextDouble() * screenSize.y,
+      );
+      alpha = 1.0;
+    }
+  }
+  
+  void render(Canvas canvas) {
+    if (alpha <= 0) return;
+    
+    final paint = Paint()
+      ..color = color.withValues(alpha: alpha * 0.6)
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 0.5);
+    
+    canvas.save();
+    canvas.translate(position.x, position.y);
+    canvas.rotate(rotation);
+    
+    // Desenha partícula como um pequeno diamante
+    final path = Path()
+      ..moveTo(0, -size)
+      ..lineTo(size, 0)
+      ..lineTo(0, size)
+      ..lineTo(-size, 0)
+      ..close();
+    
+    canvas.drawPath(path, paint);
+    canvas.restore();
   }
 }

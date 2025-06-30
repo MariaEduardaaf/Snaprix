@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../game/tetris_game.dart';
+import '../l10n/app_localizations.dart';
 
 class PauseMenu extends StatelessWidget {
   final TetrisGame game;
@@ -15,7 +16,7 @@ class PauseMenu extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'Pausado', 
+              AppLocalizations.of(context)!.paused, 
               style: TextStyle(
                 fontSize: 36,
                 fontWeight: FontWeight.bold,
@@ -33,7 +34,7 @@ class PauseMenu extends StatelessWidget {
                 foregroundColor: Colors.white,
               ),
               child: Text(
-                'Continuar',
+                AppLocalizations.of(context)!.continueGame,
                 style: TextStyle(fontSize: 20),
               ),
             ),
@@ -49,7 +50,7 @@ class PauseMenu extends StatelessWidget {
                 foregroundColor: Colors.white,
               ),
               child: Text(
-                'Reiniciar',
+                AppLocalizations.of(context)!.restart,
                 style: TextStyle(fontSize: 18),
               ),
             ),
@@ -66,7 +67,7 @@ class PauseMenu extends StatelessWidget {
                 foregroundColor: Colors.white,
               ),
               child: Text(
-                'Sair para Menu',
+                AppLocalizations.of(context)!.exitToMenu,
                 style: TextStyle(fontSize: 18),
               ),
             ),

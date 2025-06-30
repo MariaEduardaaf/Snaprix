@@ -5,7 +5,12 @@
       "Bash(open:*)",
       "Bash(mv:*)",
       "Bash(flutter:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(gh auth:*)",
+      "Bash(gh repo create:*)",
+      "Bash(git push:*)",
+      "Bash(mkdir:*)",
+      "Bash(git add:*)"
     ],
     "deny": []
   }

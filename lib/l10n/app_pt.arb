@@ -1,0 +1,86 @@
+{
+  "gameTitle": "Snaprix",
+  "@gameTitle": {
+    "description": "O título do jogo"
+  },
+  
+  "playButton": "🎮 JOGAR",
+  "@playButton": {
+    "description": "Botão para começar a jogar"
+  },
+  
+  "gameOver": "💀 FIM DE JOGO",
+  "@gameOver": {
+    "description": "Título de fim de jogo"
+  },
+  
+  "statistics": "🏆 ESTATÍSTICAS",
+  "@statistics": {
+    "description": "Título da seção de estatísticas"
+  },
+  
+  "score": "💰 PONTUAÇÃO",
+  "@score": {
+    "description": "Rótulo da pontuação do jogador"
+  },
+  
+  "level": "📊 NÍVEL",
+  "@level": {
+    "description": "Rótulo do nível do jogador"
+  },
+  
+  "lines": "📏 LINHAS",
+  "@lines": {
+    "description": "Rótulo das linhas eliminadas"
+  },
+  
+  "playAgain": "🎮 JOGAR NOVAMENTE",
+  "@playAgain": {
+    "description": "Botão para jogar novamente"
+  },
+  
+  "mainMenu": "🏠 MENU INICIAL",
+  "@mainMenu": {
+    "description": "Botão para voltar ao menu principal"
+  },
+  
+  "motivationalMessage": "Continue tentando! 💪",
+  "@motivationalMessage": {
+    "description": "Mensagem motivacional mostrada no fim de jogo"
+  },
+  
+  "pause": "⏸️ PAUSAR",
+  "@pause": {
+    "description": "Texto do botão pausar"
+  },
+  
+  "resume": "▶️ CONTINUAR",
+  "@resume": {
+    "description": "Texto do botão continuar"
+  },
+  
+  "settings": "⚙️ CONFIGURAÇÕES",
+  "@settings": {
+    "description": "Texto do botão configurações"
+  },
+  
+  "paused": "Pausado",
+  "@paused": {
+    "description": "Título do jogo pausado"
+  },
+  
+  "continueGame": "Continuar",
+  "@continueGame": {
+    "description": "Texto do botão continuar"
+  },
+  
+  "restart": "Reiniciar",
+  "@restart": {
+    "description": "Texto do botão reiniciar"
+  },
+  
+  "exitToMenu": "Sair para Menu",
+  "@exitToMenu": {
+    "description": "Texto do botão sair para menu"
+  }
+}

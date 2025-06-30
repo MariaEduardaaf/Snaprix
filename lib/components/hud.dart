@@ -14,10 +14,10 @@ class HudComponent extends Component with HasGameReference<TetrisGame> {
     final screenHeight = game.size.y;
     print('🖥️ [SNAPRIX HUD] Carregando HUD - Tela: ${screenWidth.toInt()}x${screenHeight.toInt()}');
     
-    // Fundo do HUD mais compacto e elegante
+    // Fundo do HUD mais compacto e elegante, respeitando SafeArea
     hudBackground = RectangleComponent(
       size: Vector2(screenWidth - 20, 80),
-      position: Vector2(10, 10),
+      position: Vector2(10, 50), // Aumentado de 10 para 50 para evitar camera/notch
       paint: Paint()
         ..color = const Color(0xFF1a1a1a).withOpacity(0.95)
         ..style = PaintingStyle.fill,
@@ -27,7 +27,7 @@ class HudComponent extends Component with HasGameReference<TetrisGame> {
     // Borda com cantos arredondados simulados
     final hudBorder = RectangleComponent(
       size: Vector2(screenWidth - 20, 80),
-      position: Vector2(10, 10),
+      position: Vector2(10, 50), // Atualizado para corresponder ao background
       paint: Paint()
         ..color = const Color(0xFF00FFFF).withOpacity(0.6)
         ..style = PaintingStyle.stroke
@@ -46,7 +46,7 @@ class HudComponent extends Component with HasGameReference<TetrisGame> {
           letterSpacing: 2.0,
         ),
       ),
-      position: Vector2(screenWidth / 2, 25),
+      position: Vector2(screenWidth / 2, 65), // Ajustado para nova posição do HUD
       anchor: Anchor.center,
     );
     add(titleText);
@@ -64,7 +64,7 @@ class HudComponent extends Component with HasGameReference<TetrisGame> {
           fontWeight: FontWeight.bold,
         ),
       ),
-      position: Vector2(20 + spacing * 0.5, 65),
+      position: Vector2(20 + spacing * 0.5, 105), // Ajustado para nova posição do HUD
       anchor: Anchor.center,
     );
     add(scoreText);
@@ -79,7 +79,7 @@ class HudComponent extends Component with HasGameReference<TetrisGame> {
           fontWeight: FontWeight.w500,
         ),
       ),
-      position: Vector2(20 + spacing * 0.5, 50),
+      position: Vector2(20 + spacing * 0.5, 90), // Ajustado para nova posição do HUD
       anchor: Anchor.center,
     );
     add(scoreLabel);
@@ -94,7 +94,7 @@ class HudComponent extends Component with HasGameReference<TetrisGame> {
           fontWeight: FontWeight.bold,
         ),
       ),
-      position: Vector2(screenWidth / 2, 65),
+      position: Vector2(screenWidth / 2, 105), // Ajustado para nova posição do HUD
       anchor: Anchor.center,
     );
     add(levelText);
@@ -109,7 +109,7 @@ class HudComponent extends Component with HasGameReference<TetrisGame> {
           fontWeight: FontWeight.w500,
         ),
       ),
-      position: Vector2(screenWidth / 2, 50),
+      position: Vector2(screenWidth / 2, 90), // Ajustado para nova posição do HUD
       anchor: Anchor.center,
     );
     add(levelLabel);
@@ -124,7 +124,7 @@ class HudComponent extends Component with HasGameReference<TetrisGame> {
           fontWeight: FontWeight.bold,
         ),
       ),
-      position: Vector2(screenWidth - 20 - spacing * 0.5, 65),
+      position: Vector2(screenWidth - 20 - spacing * 0.5, 105), // Ajustado para nova posição do HUD
       anchor: Anchor.center,
     );
     add(linesText);
@@ -139,7 +139,7 @@ class HudComponent extends Component with HasGameReference<TetrisGame> {
           fontWeight: FontWeight.w500,
         ),
       ),
-      position: Vector2(screenWidth - 20 - spacing * 0.5, 50),
+      position: Vector2(screenWidth - 20 - spacing * 0.5, 90), // Ajustado para nova posição do HUD
       anchor: Anchor.center,
     );
     add(linesLabel);
