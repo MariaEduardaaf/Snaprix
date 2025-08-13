@@ -1,95 +1,132 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../game/tetris_game.dart';
+import 'ad_banner.dart';
 
-class MobileControls extends StatelessWidget {
+class MobileControls extends StatefulWidget {
   final TetrisGame game;
 
   const MobileControls({Key? key, required this.game}) : super(key: key);
 
   @override
+  State<MobileControls> createState() => _MobileControlsState();
+}
+
+class _MobileControlsState extends State<MobileControls> {
+  @override
   Widget build(BuildContext context) {
-    return Positioned(
-      bottom: 20,
-      left: 20,
-      right: 20,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          // Controles de movimento (esquerda)
-          Row(
+    return Stack(
+      children: [
+        // Controles mínimos - Esquerda
+        Positioned(
+          bottom: 80, // Mais alto para não sobrepor o banner
+          left: 20,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              _buildControlButton(
-                icon: Icons.arrow_left,
-                onPressed: () => game.movePieceLeft(),
-                color: Colors.blue,
+              // Rotação única
+              _buildCompactButton(
+                icon: Icons.refresh,
+                color: Colors.purple,
+                size: 48,
+                onPressed: () => widget.game.rotatePiece(),
               ),
-              const SizedBox(width: 10),
-              Column(
+              const SizedBox(height: 10),
+              // Movimento horizontal
+              Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  _buildControlButton(
-                    icon: Icons.rotate_right,
-                    onPressed: () => game.rotatePiece(),
-                    color: Colors.purple,
+                  _buildCompactButton(
+                    icon: Icons.keyboard_arrow_left,
+                    color: Colors.blue,
+                    size: 48,
+                    onPressed: () => widget.game.movePieceLeft(),
                   ),
-                  const SizedBox(height: 10),
-                  _buildControlButton(
-                    icon: Icons.arrow_downward,
-                    onPressed: () => game.movePieceDown(),
-                    color: Colors.green,
+                  const SizedBox(width: 10),
+                  _buildCompactButton(
+                    icon: Icons.keyboard_arrow_right,
+                    color: Colors.blue,
+                    size: 48,
+                    onPressed: () => widget.game.movePieceRight(),
                   ),
                 ],
               ),
-              const SizedBox(width: 10),
-              _buildControlButton(
-                icon: Icons.arrow_right,
-                onPressed: () => game.movePieceRight(),
-                color: Colors.blue,
-              ),
             ],
           ),
-          
-          // Controles de ação (direita)
-          Column(
+        ),
+        
+        // Controles mínimos - Direita
+        Positioned(
+          bottom: 80, // Mais alto para não sobrepor o banner
+          right: 20,
+          child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              _buildControlButton(
-                icon: Icons.pause,
-                onPressed: () => game.pauseGame(),
-                color: Colors.orange,
-                size: 50,
+              _buildCompactButton(
+                icon: Icons.vertical_align_bottom,
+                color: Colors.red,
+                size: 48,
+                onPressed: () => widget.game.hardDrop(),
               ),
               const SizedBox(height: 10),
-              _buildControlButton(
-                icon: Icons.keyboard_double_arrow_down,
-                onPressed: () => game.hardDrop(),
-                color: Colors.red,
-                size: 60,
+              _buildCompactButton(
+                icon: Icons.keyboard_arrow_down,
+                color: Colors.green,
+                size: 48,
+                onPressed: () => widget.game.movePieceDown(),
               ),
             ],
           ),
-        ],
-      ),
+        ),
+        
+        // Pause compacto
+        Positioned(
+          top: 50,
+          right: 15,
+          child: _buildCompactButton(
+            icon: Icons.pause,
+            color: Colors.grey,
+            size: 40,
+            onPressed: () => widget.game.pauseGame(),
+          ),
+        ),
+        
+        // Banner publicitário na parte inferior
+        Positioned(
+          bottom: 0,
+          left: 0,
+          right: 0,
+          child: SafeArea(
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: const Center(
+                child: AdBannerWidget(),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
-  Widget _buildControlButton({
+  // Botão compacto e minimalista
+  Widget _buildCompactButton({
     required IconData icon,
     required VoidCallback onPressed,
     required Color color,
-    double size = 50,
+    double size = 48,
   }) {
     return Container(
       width: size,
       height: size,
       decoration: BoxDecoration(
-        color: color.withOpacity(0.8),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.white, width: 2),
+        color: color.withValues(alpha: 0.8),
+        borderRadius: BorderRadius.circular(size * 0.3),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.4), width: 1),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.3),
-            blurRadius: 4,
+            color: Colors.black.withValues(alpha: 0.3),
+            blurRadius: 3,
             offset: const Offset(0, 2),
           ),
         ],
@@ -97,12 +134,24 @@ class MobileControls extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          borderRadius: BorderRadius.circular(12),
-          onTap: onPressed,
-          child: Icon(
-            icon,
-            color: Colors.white,
-            size: size * 0.6,
+          borderRadius: BorderRadius.circular(size * 0.3),
+          onTap: () {
+            onPressed();
+            HapticFeedback.lightImpact();
+          },
+          child: Center(
+            child: Icon(
+              icon,
+              color: Colors.white,
+              size: size * 0.55,
+              shadows: [
+                Shadow(
+                  color: Colors.black.withValues(alpha: 0.6),
+                  offset: const Offset(0, 1),
+                  blurRadius: 1,
+                ),
+              ],
+            ),
           ),
         ),
       ),

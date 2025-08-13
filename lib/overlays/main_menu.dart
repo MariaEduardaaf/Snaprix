@@ -140,34 +140,36 @@ class MainMenu extends StatelessWidget {
                     ),
                   ),
                   
-                  const SizedBox(height: 40),
+                  const SizedBox(height: 60),
                   
-                  // Tutorial de controles baseado na plataforma
+                  // Slogan elegante
                   Container(
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: Colors.black.withValues(alpha: 0.3),
-                      borderRadius: BorderRadius.circular(15),
-                      border: Border.all(
-                        color: const Color(0xFF00FFFF).withValues(alpha: 0.3),
-                        width: 1,
+                    constraints: BoxConstraints(maxWidth: isSmallScreen ? 280 : 350),
+                    child: Text(
+                      'O clássico jogo de quebra-cabeças\nreimaginado para a era digital',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: isSmallScreen ? 14 : 16,
+                        color: Colors.white.withValues(alpha: 0.8),
+                        height: 1.6,
+                        fontWeight: FontWeight.w300,
+                        letterSpacing: 0.5,
                       ),
                     ),
-                    child: Column(
-                      children: [
-                        Text(
-                          isMobile ? '📱 CONTROLES MOBILE' : '🖥️ CONTROLES DESKTOP',
-                          style: TextStyle(
-                            fontSize: isSmallScreen ? 16 : 18,
-                            fontWeight: FontWeight.bold,
-                            color: const Color(0xFF00FFFF),
-                            letterSpacing: 1,
-                          ),
-                        ),
-                        const SizedBox(height: 15),
-                        _buildControlsWidget(isSmallScreen),
-                      ],
-                    ),
+                  ),
+                  
+                  const SizedBox(height: 40),
+                  
+                  // Características do jogo
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _buildFeatureIcon(Icons.speed, 'Rápido', isSmallScreen),
+                      SizedBox(width: isSmallScreen ? 25 : 35),
+                      _buildFeatureIcon(Icons.touch_app, 'Intuitivo', isSmallScreen),
+                      SizedBox(width: isSmallScreen ? 25 : 35),
+                      _buildFeatureIcon(Icons.star, 'Clássico', isSmallScreen),
+                    ],
                   ),
                   
                   const SizedBox(height: 20),
@@ -189,159 +191,37 @@ class MainMenu extends StatelessWidget {
     );
   }
   
-  Widget _buildControlsWidget(bool isSmallScreen) {
-    if (isMobile) {
-      return _buildMobileControls(isSmallScreen);
-    } else {
-      return _buildDesktopControls(isSmallScreen);
-    }
-  }
-  
-  Widget _buildMobileControls(bool isSmallScreen) {
-    final controls = [
-      ControlItem(
-        icon: '👆',
-        title: 'Arrastar Horizontal',
-        description: 'Mover peças esquerda/direita',
-      ),
-      ControlItem(
-        icon: '👆',
-        title: 'Toque Rápido',
-        description: 'Rotacionar peça',
-      ),
-      ControlItem(
-        icon: '👆',
-        title: 'Toque Longo',
-        description: 'Queda rápida (Hard Drop)',
-      ),
-      ControlItem(
-        icon: '👆',
-        title: 'Arrastar Para Baixo',
-        description: 'Acelerar queda',
-      ),
-    ];
-    
+  // Ícone de característica do jogo
+  Widget _buildFeatureIcon(IconData icon, String label, bool isSmallScreen) {
     return Column(
-      children: controls.map((control) => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 4),
-        child: Row(
-          children: [
-            Text(
-              control.icon,
-              style: TextStyle(fontSize: isSmallScreen ? 16 : 20),
+      children: [
+        Container(
+          width: isSmallScreen ? 45 : 55,
+          height: isSmallScreen ? 45 : 55,
+          decoration: BoxDecoration(
+            color: const Color(0xFF00FFFF).withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(isSmallScreen ? 22 : 27),
+            border: Border.all(
+              color: const Color(0xFF00FFFF).withValues(alpha: 0.3),
+              width: 1.5,
             ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    control.title,
-                    style: TextStyle(
-                      fontSize: isSmallScreen ? 12 : 14,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                  Text(
-                    control.description,
-                    style: TextStyle(
-                      fontSize: isSmallScreen ? 10 : 12,
-                      color: Colors.white70,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
+          ),
+          child: Icon(
+            icon,
+            color: const Color(0xFF00FFFF),
+            size: isSmallScreen ? 22 : 26,
+          ),
         ),
-      )).toList(),
+        const SizedBox(height: 8),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: isSmallScreen ? 12 : 14,
+            color: Colors.white.withValues(alpha: 0.7),
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ],
     );
   }
-  
-  Widget _buildDesktopControls(bool isSmallScreen) {
-    final controls = [
-      ControlItem(
-        icon: '⬅️➡️',
-        title: 'Setas Esq/Dir',
-        description: 'Mover peças horizontalmente',
-      ),
-      ControlItem(
-        icon: '⬆️',
-        title: 'Seta Cima',
-        description: 'Rotacionar peça',
-      ),
-      ControlItem(
-        icon: '⬇️',
-        title: 'Seta Baixo',
-        description: 'Acelerar queda',
-      ),
-      ControlItem(
-        icon: '⎵',
-        title: 'SPACE',
-        description: 'Queda rápida (Hard Drop)',
-      ),
-      ControlItem(
-        icon: '⎋',
-        title: 'ESC',
-        description: 'Pausar jogo',
-      ),
-    ];
-    
-    return Column(
-      children: controls.map((control) => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 4),
-        child: Row(
-          children: [
-            Container(
-              width: isSmallScreen ? 30 : 35,
-              child: Text(
-                control.icon,
-                style: TextStyle(
-                  fontSize: isSmallScreen ? 12 : 14,
-                  fontWeight: FontWeight.bold,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    control.title,
-                    style: TextStyle(
-                      fontSize: isSmallScreen ? 12 : 14,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                  Text(
-                    control.description,
-                    style: TextStyle(
-                      fontSize: isSmallScreen ? 10 : 12,
-                      color: Colors.white70,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      )).toList(),
-    );
-  }
-}
-
-class ControlItem {
-  final String icon;
-  final String title;
-  final String description;
-  
-  ControlItem({
-    required this.icon,
-    required this.title,
-    required this.description,
-  });
 }

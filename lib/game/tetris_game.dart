@@ -40,6 +40,10 @@ class TetrisGame extends FlameGame with HasKeyboardHandlerComponents, HasCollisi
   bool isPaused = false;
   bool gameStarted = false;
   
+  // Sistema HOLD
+  Tetromino? heldPiece;
+  bool canHold = true;
+  
   // Componentes de interface
   late GameBoard gameBoard;
   late HudComponent hud;
@@ -66,18 +70,19 @@ class TetrisGame extends FlameGame with HasKeyboardHandlerComponents, HasCollisi
     gameBoard = GameBoard();
     hud = HudComponent();
     
-    // Centraliza o tabuleiro com margens assimétricas
+    // Separação clara entre HUD e tabuleiro
     final boardWidth = columns * cellSize;
     final boardHeight = rows * cellSize;
-    final hudHeight = size.y * 0.12; // Espaço para HUD superior
-    final adSpaceHeight = size.y * 0.12; // 12% da tela reservado para anúncios
-    final hudBoardMargin = 20.0; // Margem entre HUD e tabuleiro
-    final topBoardMargin = 350.0; // Margem superior de 350px
-    final bottomBoardMargin = 300.0; // Margem inferior aumentada
+    final safeAreaTop = 50.0; // Mesmo valor usado no HUD
+    final hudHeight = 100.0; // Altura fixa do HUD
+    final hudTotalHeight = safeAreaTop + hudHeight; // Altura total ocupada pelo HUD: 150px
+    final separationMargin = 120.0; // Margem otimizada para tabuleiro menor
+    final controlsMargin = 150.0; // Margem inferior para os controles mobile
     
-    // Calcula espaço disponível com margens assimétricas
-    final availableGameHeight = size.y - hudHeight - adSpaceHeight - hudBoardMargin - topBoardMargin - bottomBoardMargin;
-    final verticalOffset = hudHeight + hudBoardMargin + topBoardMargin + (availableGameHeight - boardHeight) / 2;
+    // Tabuleiro começa DEPOIS do HUD + margem de separação  
+    final boardStartY = hudTotalHeight + separationMargin; // 150 + 120 = 270px do topo
+    final availableGameHeight = size.y - boardStartY - controlsMargin;
+    final verticalOffset = boardStartY + (availableGameHeight - boardHeight) / 2;
     
     // Centraliza horizontalmente com margem mínima
     final horizontalOffset = (size.x - boardWidth) / 2;
@@ -87,8 +92,8 @@ class TetrisGame extends FlameGame with HasKeyboardHandlerComponents, HasCollisi
       verticalOffset,
     );
     
-    print('🎯 [SNAPRIX] Tabuleiro com margens assimétricas: ${gameBoard.position}, tamanho: ${boardWidth.toInt()}x${boardHeight.toInt()}');
-    print('📱 [SNAPRIX] Margens - HUD: ${hudBoardMargin}px, Superior: ${topBoardMargin}px, Inferior: ${bottomBoardMargin}px, Lateral: ${horizontalOffset.toInt()}px');
+    print('🎯 [SNAPRIX] Tabuleiro PERFEITAMENTE separado: ${gameBoard.position}, tamanho: ${boardWidth.toInt()}x${boardHeight.toInt()}');
+    print('📱 [SNAPRIX] HUD: 0-${hudTotalHeight.toInt()}px | Separação EXTRA: ${separationMargin.toInt()}px | Tabuleiro: ${boardStartY.toInt()}px+ | Controles: ${controlsMargin}px');
     
     add(gameBoard);
     add(hud);
@@ -102,36 +107,35 @@ class TetrisGame extends FlameGame with HasKeyboardHandlerComponents, HasCollisi
   }
   
   void _calculateCellSize() {
-    // Calcula o tamanho da célula baseado na tela disponível
+    // Calcula o tamanho da célula para usar MÁXIMO espaço disponível
     final screenWidth = size.x;
     final screenHeight = size.y;
     
-    // Reserva mais espaço para diminuir o tabuleiro verticalmente
-    final hudSpace = 145; // Espaço para HUD superior
-    final adSpace = screenHeight * 0.15; // Aumentado para 15% para anúncios
-    final topBottomMargin = 60; // Margem superior e inferior aumentada para 60px
-    final safetyMargin = 40; // Margem de segurança aumentada para 40px
+    // Otimizado para usar TELA CHEIA
+    final hudSpace = 100; // HUD mais compacto
+    final controlsSpace = 160; // Espaço para controles na parte inferior
+    final safetyMargin = 20; // Margem mínima
     
-    final availableHeight = screenHeight - hudSpace - adSpace - (topBottomMargin * 2) - safetyMargin;
-    final availableWidth = screenWidth * 0.75; // Reduzido para 75% da largura - tabuleiro menor
+    final availableHeight = screenHeight - hudSpace - controlsSpace - safetyMargin;
+    final availableWidth = screenWidth * 0.95; // Usar 95% da largura
     
     // Calcula baseado nas dimensões do tabuleiro
     final cellSizeByWidth = availableWidth / columns;
     final cellSizeByHeight = availableHeight / rows;
     
-    // Prioriza o aproveitamento máximo da tela
+    // Usa o menor para manter proporção mas maximiza o uso
     cellSize = min(cellSizeByWidth, cellSizeByHeight);
     
-    // Força uso da largura se for viável (dentro de uma margem razoável)
-    if (cellSizeByWidth >= cellSize * 0.9) {
-      cellSize = cellSizeByWidth;
-    }
+    // Tamanho reduzido para tabuleiro menor
+    cellSize = max(cellSize, 28.0);
     
-    cellSize = max(cellSize, 30.0); // Tamanho mínimo generoso
+    // Limita o tamanho máximo para não ficar muito grande
+    cellSize = min(cellSize, 32.0);
     
-    print('🎯 [SNAPRIX] Célula com margens: ${cellSize.toStringAsFixed(1)}px');
-    print('📱 [SNAPRIX] Tela: ${screenWidth.toInt()}x${screenHeight.toInt()}, Tabuleiro: ${(cellSize * columns).toInt()}x${(cellSize * rows).toInt()}');
-    print('📊 [SNAPRIX] Tabuleiro REDUZIDO - Superior/Inferior: ${topBottomMargin}px, Largura: 75%');
+    print('🎯 [SNAPRIX] TELA CHEIA - Célula: ${cellSize.toStringAsFixed(1)}px');
+    print('📱 [SNAPRIX] Tela: ${screenWidth.toInt()}x${screenHeight.toInt()}');
+    print('🏗️ [SNAPRIX] Tabuleiro: ${(cellSize * columns).toInt()}x${(cellSize * rows).toInt()}');
+    print('📊 [SNAPRIX] Aproveitamento: ${((cellSize * columns * cellSize * rows) / (screenWidth * screenHeight) * 100).toStringAsFixed(1)}%');
     
     // Atualiza constante global
     GameConstants.cellSize = cellSize;
@@ -200,8 +204,9 @@ class TetrisGame extends FlameGame with HasKeyboardHandlerComponents, HasCollisi
       currentPiece = null;
     }
     
-    // Não adiciona mais controles móveis - usando gestos
-    print('👆 [SNAPRIX] Controles por gestos ativados');
+    // Adicionar controles mobile
+    overlays.add('MobileControls');
+    print('🎮 [SNAPRIX] Controles mobile ativados');
     
     // Inicia música de fundo
     startBackgroundMusic();
@@ -220,12 +225,14 @@ class TetrisGame extends FlameGame with HasKeyboardHandlerComponents, HasCollisi
     isPaused = true;
     pauseBackgroundMusic();
     pauseEngine(); // pausa o loop do jogo
+    overlays.remove('MobileControls');
     overlays.add('PauseMenu');
   }
   
   void resumeGame() {
     isPaused = false;
     overlays.remove('PauseMenu');
+    overlays.add('MobileControls');
     resumeBackgroundMusic();
     resumeEngine(); // retoma o loop do jogo
   }
@@ -246,7 +253,10 @@ class TetrisGame extends FlameGame with HasKeyboardHandlerComponents, HasCollisi
       currentPiece = null;
     }
     
-    // Limpa overlays se necessário
+    // Limpa overlays
+    overlays.remove('PauseMenu');
+    overlays.remove('GameOver');
+    overlays.remove('MobileControls');
     
     // Para a música de fundo
     stopBackgroundMusic();
@@ -265,6 +275,10 @@ class TetrisGame extends FlameGame with HasKeyboardHandlerComponents, HasCollisi
     piece.position.y = gameBoard.position.y;
     add(piece);
     currentPiece = piece;
+    
+    // Resetar possibilidade de usar hold para a nova peça
+    canHold = true;
+    
     print('📍 [SNAPRIX] Peça posicionada em (${piece.position.x.toInt()}, ${piece.position.y.toInt()})');
     
     // Verifica colisão imediata (se o topo já está ocupado -> Game Over)
@@ -364,7 +378,8 @@ class TetrisGame extends FlameGame with HasKeyboardHandlerComponents, HasCollisi
     playSound('game_over.mp3');
     stopBackgroundMusic();
     pauseEngine();  // pausa o loop do jogo
-    // Ativa overlay de Game Over para mostrar mensagem e opções
+    // Remove controles e ativa overlay de Game Over
+    overlays.remove('MobileControls');
     overlays.add('GameOver');
   }
   
@@ -445,6 +460,65 @@ class TetrisGame extends FlameGame with HasKeyboardHandlerComponents, HasCollisi
         clearLines();
         spawnNewPiece();
       }
+    }
+  }
+  
+  void softDrop() {
+    if (currentPiece != null && !isGameOver && gameStarted && !isPaused) {
+      // Acelera a queda por algumas unidades
+      for (int i = 0; i < 3; i++) {
+        if (!isCollision(currentPiece!, dx: 0, dy: 1)) {
+          currentPiece!.position.y += cellSize;
+        } else {
+          break;
+        }
+      }
+      playSound('move.mp3');
+    }
+  }
+  
+  void rotatePieceCounterClockwise() {
+    if (currentPiece != null && !isGameOver && gameStarted && !isPaused) {
+      // Rotação anti-horária = 3 rotações horárias
+      for (int i = 0; i < 3; i++) {
+        currentPiece!.rotate();
+      }
+      // se após rotar colidir, desfaz rotação
+      if (isCollision(currentPiece!, dx: 0, dy: 0)) {
+        // desfazer rotação (1 rotação horária)
+        currentPiece!.rotate();
+        print('🚫 [SNAPRIX] Rotação anti-horária bloqueada por colisão');
+      } else {
+        playSound('rotate.mp3');
+        print('🔄 [SNAPRIX] Peça rotacionada anti-horária');
+      }
+    }
+  }
+  
+  void holdPiece() {
+    if (currentPiece != null && canHold && !isGameOver && gameStarted && !isPaused) {
+      if (heldPiece == null) {
+        // Primeira vez usando hold
+        heldPiece = currentPiece;
+        heldPiece!.removeFromParent();
+        currentPiece = null;
+        spawnNewPiece();
+      } else {
+        // Troca a peça atual pela que está em hold
+        Tetromino temp = currentPiece!;
+        temp.removeFromParent();
+        
+        currentPiece = heldPiece;
+        currentPiece!.position.x = gameBoard.position.x + (columns / 2 - 1) * cellSize;
+        currentPiece!.position.y = gameBoard.position.y;
+        add(currentPiece!);
+        
+        heldPiece = temp;
+      }
+      
+      canHold = false; // Só pode usar hold uma vez por peça
+      playSound('hold.mp3');
+      print('📦 [SNAPRIX] Peça colocada em hold');
     }
   }
   

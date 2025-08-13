@@ -20,10 +20,10 @@ class Block extends PositionComponent {
       center: const Alignment(-0.3, -0.3),
       radius: 1.0,
       colors: [
-        _baseColor.withOpacity(1.0),
-        _baseColor.withOpacity(0.9),
-        _baseColor.withOpacity(0.7),
-        _baseColor.withOpacity(0.5),
+        _baseColor.withValues(alpha: 1.0),
+        _baseColor.withValues(alpha: 0.9),
+        _baseColor.withValues(alpha: 0.7),
+        _baseColor.withValues(alpha: 0.5),
       ],
       stops: const [0.0, 0.3, 0.7, 1.0],
     );
@@ -33,7 +33,7 @@ class Block extends PositionComponent {
     
     // Sombra externa
     final shadowPaint = Paint()
-      ..color = Colors.black.withOpacity(0.3)
+      ..color = Colors.black.withValues(alpha: 0.3)
       ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 2.0);
     
     final shadowRect = Rect.fromLTWH(2, 2, size.x, size.y);
@@ -50,7 +50,7 @@ class Block extends PositionComponent {
     
     // Highlight superior esquerdo
     final highlightPaint = Paint()
-      ..color = Colors.white.withOpacity(0.4)
+      ..color = Colors.white.withValues(alpha: 0.4)
       ..strokeWidth = 1.5;
     
     canvas.drawLine(
@@ -66,7 +66,7 @@ class Block extends PositionComponent {
     
     // Sombra inferior direita
     final shadowLinePaint = Paint()
-      ..color = Colors.black.withOpacity(0.3)
+      ..color = Colors.black.withValues(alpha: 0.3)
       ..strokeWidth = 1.5;
     
     canvas.drawLine(
@@ -82,7 +82,7 @@ class Block extends PositionComponent {
     
     // Borda externa sutil
     final borderPaint = Paint()
-      ..color = Colors.black.withOpacity(0.6)
+      ..color = Colors.black.withValues(alpha: 0.6)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.0;
     
@@ -124,10 +124,10 @@ class GameBlock extends RectangleComponent {
       center: const Alignment(-0.3, -0.3),
       radius: 1.0,
       colors: [
-        blockColor.withOpacity(1.0),
-        blockColor.withOpacity(0.9),
-        blockColor.withOpacity(0.7),
-        blockColor.withOpacity(0.5),
+        blockColor.withValues(alpha: 1.0),
+        blockColor.withValues(alpha: 0.9),
+        blockColor.withValues(alpha: 0.7),
+        blockColor.withValues(alpha: 0.5),
       ],
       stops: const [0.0, 0.3, 0.7, 1.0],
     );
@@ -137,7 +137,7 @@ class GameBlock extends RectangleComponent {
     
     // Sombra externa
     final shadowPaint = Paint()
-      ..color = Colors.black.withOpacity(0.4)
+      ..color = Colors.black.withValues(alpha: 0.4)
       ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 1.5);
     
     final shadowRect = Rect.fromLTWH(1.5, 1.5, size.x, size.y);
@@ -154,7 +154,7 @@ class GameBlock extends RectangleComponent {
     
     // Highlight superior esquerdo
     final highlightPaint = Paint()
-      ..color = Colors.white.withOpacity(0.5)
+      ..color = Colors.white.withValues(alpha: 0.5)
       ..strokeWidth = 1.0;
     
     canvas.drawLine(
@@ -170,7 +170,7 @@ class GameBlock extends RectangleComponent {
     
     // Sombra inferior direita
     final shadowLinePaint = Paint()
-      ..color = Colors.black.withOpacity(0.4)
+      ..color = Colors.black.withValues(alpha: 0.4)
       ..strokeWidth = 1.0;
     
     canvas.drawLine(
@@ -186,7 +186,7 @@ class GameBlock extends RectangleComponent {
     
     // Borda externa
     final borderPaint = Paint()
-      ..color = Colors.black.withOpacity(0.7)
+      ..color = Colors.black.withValues(alpha: 0.7)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 0.8;
     

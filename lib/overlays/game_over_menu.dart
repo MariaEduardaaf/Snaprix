@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../game/tetris_game.dart';
 import '../l10n/app_localizations.dart';
+import '../services/ad_service.dart';
 
 class GameOverMenu extends StatelessWidget {
   final TetrisGame game;
@@ -174,8 +175,13 @@ class GameOverMenu extends StatelessWidget {
                         ),
                         child: ElevatedButton(
                           onPressed: () {
-                            game.overlays.remove('GameOver');
-                            game.startGame();
+                            // Mostrar anúncio intersticial antes de reiniciar
+                            AdService().showInterstitialAd(
+                              onAdClosed: () {
+                                game.overlays.remove('GameOver');
+                                game.startGame();
+                              },
+                            );
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.transparent,
@@ -195,6 +201,77 @@ class GameOverMenu extends StatelessWidget {
                               color: Colors.black,
                               letterSpacing: 1,
                             ),
+                          ),
+                        ),
+                      ),
+                      
+                      const SizedBox(height: 15),
+                      
+                      // Botão Continue com Anúncio (Recompensado)
+                      Container(
+                        width: double.infinity,
+                        margin: const EdgeInsets.symmetric(horizontal: 20),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          gradient: const LinearGradient(
+                            colors: [
+                              Color(0xFFFFD700),
+                              Color(0xFFFFA500),
+                            ],
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: const Color(0xFFFFD700).withValues(alpha: 0.3),
+                              blurRadius: 15,
+                              spreadRadius: 1,
+                            ),
+                          ],
+                        ),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            // Mostrar anúncio recompensado para continuar
+                            AdService().showRewardedAd(
+                              onUserEarnedReward: () {
+                                // Dar uma "segunda chance" ao jogador
+                                game.overlays.remove('GameOver');
+                                // Poderia limpar algumas linhas do tabuleiro ou dar pontos bonus
+                                game.startGame();
+                              },
+                              onAdClosed: () {
+                                // Se não completou o anúncio, fica na tela de game over
+                                print('🟡 [SNAPRIX] Usuário fechou anúncio sem completar');
+                              },
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.transparent,
+                            shadowColor: Colors.transparent,
+                            padding: EdgeInsets.symmetric(
+                              vertical: isSmallScreen ? 15 : 18,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(
+                                Icons.play_circle_filled,
+                                color: Colors.black,
+                                size: 24,
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                'Continue (Assista Anúncio)',
+                                style: TextStyle(
+                                  fontSize: isSmallScreen ? 16 : 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                  letterSpacing: 0.5,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),

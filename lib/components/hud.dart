@@ -12,137 +12,157 @@ class HudComponent extends Component with HasGameReference<TetrisGame> {
   Future<void> onLoad() async {
     final screenWidth = game.size.x;
     final screenHeight = game.size.y;
-    print('🖥️ [SNAPRIX HUD] Carregando HUD - Tela: ${screenWidth.toInt()}x${screenHeight.toInt()}');
     
-    // Fundo do HUD mais compacto e elegante, respeitando SafeArea
+    // Adiciona espaço para SafeArea (status bar, notch, etc.)
+    final safeAreaTop = 50.0; // Espaço seguro no topo
+    
+    print('🖥️ [SNAPRIX HUD] Carregando HUD - Tela: ${screenWidth.toInt()}x${screenHeight.toInt()}');
+    print('📱 [SNAPRIX HUD] SafeArea Top: ${safeAreaTop}px');
+    
+    // Fundo do HUD mais elegante e compacto
     hudBackground = RectangleComponent(
-      size: Vector2(screenWidth - 20, 80),
-      position: Vector2(10, 50), // Aumentado de 10 para 50 para evitar camera/notch
+      size: Vector2(screenWidth, 100),
+      position: Vector2(0, safeAreaTop),
       paint: Paint()
-        ..color = const Color(0xFF1a1a1a).withOpacity(0.95)
+        ..shader = LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            const Color(0xFF000033).withValues(alpha: 0.95),
+            const Color(0xFF000066).withValues(alpha: 0.85),
+          ],
+        ).createShader(Rect.fromLTWH(0, safeAreaTop, screenWidth, 100))
         ..style = PaintingStyle.fill,
     );
     add(hudBackground);
     
-    // Borda com cantos arredondados simulados
+    // Borda inferior elegante
     final hudBorder = RectangleComponent(
-      size: Vector2(screenWidth - 20, 80),
-      position: Vector2(10, 50), // Atualizado para corresponder ao background
+      size: Vector2(screenWidth, 2),
+      position: Vector2(0, safeAreaTop + 98),
       paint: Paint()
-        ..color = const Color(0xFF00FFFF).withOpacity(0.6)
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 2.0,
+        ..color = const Color(0xFF00FFFF).withValues(alpha: 0.8)
+        ..style = PaintingStyle.fill,
     );
     add(hudBorder);
     
-    // Título mais discreto
+    // Título elegante no centro
     final titleText = TextComponent(
       text: 'SNAPRIX',
       textRenderer: TextPaint(
         style: const TextStyle(
           color: Color(0xFF00FFFF),
-          fontSize: 16,
+          fontSize: 22,
           fontWeight: FontWeight.bold,
-          letterSpacing: 2.0,
+          letterSpacing: 3.0,
+          shadows: [
+            Shadow(
+              color: Color(0xFF0066FF),
+              offset: Offset(2, 2),
+              blurRadius: 4,
+            ),
+          ],
         ),
       ),
-      position: Vector2(screenWidth / 2, 65), // Ajustado para nova posição do HUD
+      position: Vector2(screenWidth / 2, safeAreaTop + 35),
       anchor: Anchor.center,
     );
     add(titleText);
     
-    // Layout horizontal mais equilibrado
-    final spacing = (screenWidth - 40) / 3;
+    // Layout bem distribuído em três colunas
+    final leftX = screenWidth * 0.15;   // 15% da tela (score)
+    final centerX = screenWidth * 0.5;  // 50% da tela (level)
+    final rightX = screenWidth * 0.85;  // 85% da tela (lines)
     
-    // Score (esquerda)
+    // === SCORE (Esquerda) ===
+    final scoreLabel = TextComponent(
+      text: 'SCORE',
+      textRenderer: TextPaint(
+        style: const TextStyle(
+          color: Color(0xFFAAAAAA),
+          fontSize: 11,
+          fontWeight: FontWeight.w600,
+          letterSpacing: 1.0,
+        ),
+      ),
+      position: Vector2(leftX, safeAreaTop + 70),
+      anchor: Anchor.center,
+    );
+    add(scoreLabel);
+    
     scoreText = TextComponent(
       text: '0',
       textRenderer: TextPaint(
         style: const TextStyle(
           color: Colors.white,
-          fontSize: 18,
+          fontSize: 16,
           fontWeight: FontWeight.bold,
         ),
       ),
-      position: Vector2(20 + spacing * 0.5, 105), // Ajustado para nova posição do HUD
+      position: Vector2(leftX, safeAreaTop + 105),
       anchor: Anchor.center,
     );
     add(scoreText);
     
-    // Label do Score
-    final scoreLabel = TextComponent(
-      text: 'SCORE',
+    // === LEVEL (Centro) ===
+    final levelLabel = TextComponent(
+      text: 'LEVEL',
       textRenderer: TextPaint(
         style: const TextStyle(
-          color: Color(0xFF888888),
-          fontSize: 10,
-          fontWeight: FontWeight.w500,
+          color: Color(0xFFAAAAAA),
+          fontSize: 11,
+          fontWeight: FontWeight.w600,
+          letterSpacing: 1.0,
         ),
       ),
-      position: Vector2(20 + spacing * 0.5, 90), // Ajustado para nova posição do HUD
+      position: Vector2(centerX, safeAreaTop + 70),
       anchor: Anchor.center,
     );
-    add(scoreLabel);
+    add(levelLabel);
     
-    // Level (centro)
     levelText = TextComponent(
       text: '1',
       textRenderer: TextPaint(
         style: const TextStyle(
           color: Color(0xFFFF8C00),
-          fontSize: 18,
+          fontSize: 16,
           fontWeight: FontWeight.bold,
         ),
       ),
-      position: Vector2(screenWidth / 2, 105), // Ajustado para nova posição do HUD
+      position: Vector2(centerX, safeAreaTop + 105),
       anchor: Anchor.center,
     );
     add(levelText);
     
-    // Label do Level
-    final levelLabel = TextComponent(
-      text: 'LEVEL',
+    // === LINES (Direita) ===
+    final linesLabel = TextComponent(
+      text: 'LINES',
       textRenderer: TextPaint(
         style: const TextStyle(
-          color: Color(0xFF888888),
-          fontSize: 10,
-          fontWeight: FontWeight.w500,
+          color: Color(0xFFAAAAAA),
+          fontSize: 11,
+          fontWeight: FontWeight.w600,
+          letterSpacing: 1.0,
         ),
       ),
-      position: Vector2(screenWidth / 2, 90), // Ajustado para nova posição do HUD
+      position: Vector2(rightX, safeAreaTop + 70),
       anchor: Anchor.center,
     );
-    add(levelLabel);
+    add(linesLabel);
     
-    // Lines (direita)
     linesText = TextComponent(
       text: '0',
       textRenderer: TextPaint(
         style: const TextStyle(
           color: Color(0xFF32CD32),
-          fontSize: 18,
+          fontSize: 16,
           fontWeight: FontWeight.bold,
         ),
       ),
-      position: Vector2(screenWidth - 20 - spacing * 0.5, 105), // Ajustado para nova posição do HUD
+      position: Vector2(rightX, safeAreaTop + 105),
       anchor: Anchor.center,
     );
     add(linesText);
-    
-    // Label do Lines
-    final linesLabel = TextComponent(
-      text: 'LINES',
-      textRenderer: TextPaint(
-        style: const TextStyle(
-          color: Color(0xFF888888),
-          fontSize: 10,
-          fontWeight: FontWeight.w500,
-        ),
-      ),
-      position: Vector2(screenWidth - 20 - spacing * 0.5, 90), // Ajustado para nova posição do HUD
-      anchor: Anchor.center,
-    );
-    add(linesLabel);
   }
   
   @override
