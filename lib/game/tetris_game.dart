@@ -31,7 +31,7 @@ class TetrisGame extends FlameGame with HasKeyboardHandlerComponents, HasCollisi
   int level = 1;
   
   // Velocidade de queda (intervalo em segundos entre descidas automáticas)
-  double dropInterval = 1.0; // começa com 1 segundo por nível 1
+  double dropInterval = 0.8; // começa um pouco mais rápido (era 1.0s)
   
   // Controle interno de tempo para queda
   double _dropTimer = 0.0;
@@ -77,12 +77,12 @@ class TetrisGame extends FlameGame with HasKeyboardHandlerComponents, HasCollisi
     final safeAreaTop = 50.0; // Mesmo valor usado no HUD
     final hudHeight = 60.0; // HUD COMPACTO - só título SNAPRIX
     final hudTotalHeight = safeAreaTop + hudHeight; // Altura total ocupada pelo HUD: 110px
-    final separationMargin = 40.0; // Margem menor - stats agora estão no topo
-    final controlsMargin = 180.0; // MAIS margem para evitar contato com banner
-    final horizontalMargin = 5.0; // Margem MÍNIMA nas laterais para MAXIMIZAR tabuleiro
+    final separationMargin = 25.0; // Margem MENOR - stats agora estão no topo
+    final controlsMargin = 150.0; // MARGEM REDUZIDA para mais espaço do tabuleiro
+    final horizontalMargin = 3.0; // Margem SUPER MÍNIMA nas laterais para MAXIMIZAR tabuleiro
     
     // Tabuleiro começa DEPOIS do HUD + margem de separação  
-    final boardStartY = hudTotalHeight + separationMargin; // 110 + 40 = 150px do topo
+    final boardStartY = hudTotalHeight + separationMargin; // 110 + 25 = 135px do topo
     final availableGameHeight = size.y - boardStartY - controlsMargin;
     final verticalOffset = boardStartY + (availableGameHeight - boardHeight) / 2;
     
@@ -96,6 +96,7 @@ class TetrisGame extends FlameGame with HasKeyboardHandlerComponents, HasCollisi
     
     print('🎯 [SNAPRIX] LAYOUT FINAL - Tabuleiro centralizado: ${gameBoard.position}, tamanho: ${boardWidth.toInt()}x${boardHeight.toInt()}');
     print('📱 [SNAPRIX] Stats no topo: 0-${hudTotalHeight.toInt()}px | Tabuleiro: ${boardStartY.toInt()}px+ | Banner+Controles: ${controlsMargin.toInt()}px');
+    print('🔥 [SNAPRIX] TABULEIRO GIGANTE - Células de ${cellSize.toStringAsFixed(1)}px = Área total: ${(boardWidth * boardHeight).toInt()}px²');
     
     add(gameBoard);
     add(hud);
@@ -111,10 +112,10 @@ class TetrisGame extends FlameGame with HasKeyboardHandlerComponents, HasCollisi
     final screenHeight = size.y;
     
     // LAYOUT CENTRADO: Stats no topo + tabuleiro centralizado
-    final hudSpace = 60 + 50 + 40; // HUD (60) + SafeArea (50) + separação (40) = 150px
-    final controlsSpace = 180; // MAIS espaço para controles + banner
-    final horizontalMargin = 10; // Margem MÍNIMA para maximizar tabuleiro
-    final safetyMargin = 20; // Margem mínima
+    final hudSpace = 60 + 50 + 30; // HUD (60) + SafeArea (50) + separação (30) = 140px - REDUZIDO
+    final controlsSpace = 160; // REDUZIDO espaço para controles + banner
+    final horizontalMargin = 5; // Margem SUPER MÍNIMA para maximizar tabuleiro
+    final safetyMargin = 10; // Margem mínima REDUZIDA
     
     final availableHeight = screenHeight - hudSpace - controlsSpace - safetyMargin;
     final availableWidth = screenWidth - (horizontalMargin * 2); // Margens simétricas
@@ -126,11 +127,11 @@ class TetrisGame extends FlameGame with HasKeyboardHandlerComponents, HasCollisi
     // Usa o menor para manter proporção mas MAXIMIZA o espaço
     cellSize = min(cellSizeByWidth, cellSizeByHeight);
     
-    // Tamanho mínimo aumentado para aproveitar o espaço extra
-    cellSize = max(cellSize, 34.0);
+    // Tamanho mínimo AUMENTADO para blocos maiores
+    cellSize = max(cellSize, 38.0);
     
-    // Tamanho máximo MÁXIMO - tabuleiro GIGANTE nas laterais
-    cellSize = min(cellSize, 44.0);
+    // Tamanho máximo MUITO MAIOR - tabuleiro GIGANTE
+    cellSize = min(cellSize, 55.0);
     
     print('🎯 [SNAPRIX] LAYOUT REVOLUCIONÁRIO - Célula: ${cellSize.toStringAsFixed(1)}px');
     print('📱 [SNAPRIX] Tela: ${screenWidth.toInt()}x${screenHeight.toInt()}');
@@ -186,7 +187,7 @@ class TetrisGame extends FlameGame with HasKeyboardHandlerComponents, HasCollisi
     score = 0;
     linesCleared = 0;
     level = 1;
-    dropInterval = 1.0;
+    dropInterval = 0.8;
     _dropTimer = 0.0;
     
     // Limpa todos os overlays primeiro

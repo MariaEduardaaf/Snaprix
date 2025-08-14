@@ -19,6 +19,10 @@ class _AdvancedTouchControlsState extends State<AdvancedTouchControls> {
   String? _activeZone;
   bool _isProcessingGesture = false;
   
+  // Controle de velocidade de movimento
+  DateTime? _lastMoveTime;
+  static const Duration _moveThrottle = Duration(milliseconds: 120); // Atraso entre movimentos
+  
   // Configurações de sensibilidade
   static const double _minSwipeDistance = 50.0;
   static const double _minSwipeVelocity = 100.0;
@@ -65,84 +69,40 @@ class _AdvancedTouchControlsState extends State<AdvancedTouchControls> {
     
     return Stack(
       children: [
-        // ===== ZONA DE MOVIMENTO ESQUERDA =====
+        // ===== ZONA DE CONTROLE TOTAL POR ARRASTAR =====
         Positioned(
           top: safeArea.top,
           left: 0,
-          width: screenSize.width * 0.25,
-          height: screenSize.height * 0.75,
-          child: _MovementZone(
-            direction: MovementDirection.left,
-            onMove: () {
-              widget.game.movePieceLeft();
-              _triggerHaptic(HapticType.selection);
-              _showFeedback('move_left');
-            },
-            onContinuousMove: () {
-              // Movimento contínuo para swipe longo
-              widget.game.movePieceLeft();
-            },
-          ),
-        ),
-
-        // ===== ZONA DE MOVIMENTO DIREITA =====
-        Positioned(
-          top: safeArea.top,
           right: 0,
-          width: screenSize.width * 0.25,
-          height: screenSize.height * 0.75,
-          child: _MovementZone(
-            direction: MovementDirection.right,
-            onMove: () {
-              widget.game.movePieceRight();
-              _triggerHaptic(HapticType.selection);
-              _showFeedback('move_right');
+          bottom: 100, // Acima do banner
+          child: _FullScreenDragZone(
+            onDragMove: (direction) {
+              // Controle de velocidade - só executa se passou tempo suficiente
+              final now = DateTime.now();
+              if (_lastMoveTime == null || now.difference(_lastMoveTime!) > _moveThrottle) {
+                _lastMoveTime = now;
+                
+                if (direction == DragDirection.left) {
+                  widget.game.movePieceLeft();
+                  _triggerHaptic(HapticType.selection);
+                } else if (direction == DragDirection.right) {
+                  widget.game.movePieceRight();
+                  _triggerHaptic(HapticType.selection);
+                } else if (direction == DragDirection.down) {
+                  widget.game.movePieceDown();
+                  _triggerHaptic(HapticType.selection);
+                }
+              }
             },
-            onContinuousMove: () {
-              widget.game.movePieceRight();
-            },
-          ),
-        ),
-
-        // ===== ZONA CENTRAL (Rotação e Pause) =====
-        Positioned(
-          top: safeArea.top,
-          left: screenSize.width * 0.25,
-          right: screenSize.width * 0.25,
-          height: screenSize.height * 0.65,
-          child: _CentralGhostZone(
             onTap: () {
-              // Tap no centro = rotação
+              // Tap = rotação
               widget.game.rotatePiece();
               _triggerHaptic(HapticType.light);
-              _showFeedback('rotation');
-            },
-            onDoubleTab: () {
-              // Double tap = rotação 180°
-              widget.game.rotatePiece();
-              widget.game.rotatePiece();
-              _triggerHaptic(HapticType.medium);
-              _showFeedback('rotation');
             },
             onLongPress: () {
-              // Long press = pausa
+              // Long press = pause
               widget.game.pauseGame();
               _triggerHaptic(HapticType.heavy);
-            },
-          ),
-        ),
-
-        // ===== ZONA DE SOFT DROP (Base Centro) =====
-        Positioned(
-          bottom: 100, // Acima do banner
-          left: screenSize.width * 0.25,
-          right: screenSize.width * 0.25,
-          height: screenSize.height * 0.1,
-          child: _SoftDropZone(
-            onSoftDrop: () {
-              widget.game.movePieceDown();
-              _triggerHaptic(HapticType.selection);
-              _showFeedback('drop');
             },
           ),
         ),
@@ -170,69 +130,23 @@ class _AdvancedTouchControlsState extends State<AdvancedTouchControls> {
   }
 }
 
-// ===== ZONA DE SOFT DROP (BASE CENTRO) =====
-class _SoftDropZone extends StatelessWidget {
-  final VoidCallback onSoftDrop;
-
-  const _SoftDropZone({
-    required this.onSoftDrop,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onSoftDrop,
-      child: Container(
-        color: Colors.transparent, // COMPLETAMENTE INVISÍVEL
-      ),
-    );
-  }
+// ===== DIREÇÕES DE ARRASTAR =====
+enum DragDirection {
+  left,
+  right,
+  down,
+  up,
 }
 
-// ===== ZONA DE MOVIMENTO =====
-enum MovementDirection { left, right }
-
-class _MovementZone extends StatelessWidget {
-  final MovementDirection direction;
-  final VoidCallback onMove;
-  final VoidCallback onContinuousMove;
-
-  const _MovementZone({
-    required this.direction,
-    required this.onMove,
-    required this.onContinuousMove,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onMove,
-      onPanUpdate: (details) {
-        // Movimento contínuo durante o swipe
-        final velocity = direction == MovementDirection.left 
-            ? -details.delta.dx 
-            : details.delta.dx;
-        if (velocity > 0) {
-          onContinuousMove();
-        }
-      },
-      child: Container(
-        color: Colors.transparent, // COMPLETAMENTE INVISÍVEL
-      ),
-    );
-  }
-}
-
-
-// ===== ZONA CENTRAL FANTASMA =====
-class _CentralGhostZone extends StatelessWidget {
+// ===== ZONA DE CONTROLE TOTAL POR ARRASTAR =====
+class _FullScreenDragZone extends StatelessWidget {
+  final Function(DragDirection) onDragMove;
   final VoidCallback onTap;
-  final VoidCallback onDoubleTab;
   final VoidCallback onLongPress;
 
-  const _CentralGhostZone({
+  const _FullScreenDragZone({
+    required this.onDragMove,
     required this.onTap,
-    required this.onDoubleTab,
     required this.onLongPress,
   });
 
@@ -240,14 +154,42 @@ class _CentralGhostZone extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      onDoubleTap: onDoubleTab,
       onLongPress: onLongPress,
+      onPanUpdate: (details) {
+        // Sensibilidade AUMENTADA com controle de velocidade
+        final minDragDistance = 10.0; // Reduzido de 15.0 para 10.0 (mais sensível)
+        final dx = details.delta.dx;
+        final dy = details.delta.dy;
+        
+        // Detecta direção baseada no movimento do dedo
+        if (dx.abs() > minDragDistance || dy.abs() > minDragDistance) {
+          if (dx.abs() > dy.abs()) {
+            // Movimento horizontal predominante
+            if (dx > 0) {
+              // Arrastar para direita
+              onDragMove(DragDirection.right);
+            } else {
+              // Arrastar para esquerda
+              onDragMove(DragDirection.left);
+            }
+          } else {
+            // Movimento vertical predominante
+            if (dy > 0) {
+              // Arrastar para baixo
+              onDragMove(DragDirection.down);
+            }
+          }
+        }
+      },
       child: Container(
         color: Colors.transparent, // COMPLETAMENTE INVISÍVEL
+        child: SizedBox.expand(), // Ocupa toda a área disponível
       ),
     );
   }
 }
+
+
 
 // SISTEMA TOUCH PURO - SEM ELEMENTOS VISUAIS
 

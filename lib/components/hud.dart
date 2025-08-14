@@ -6,7 +6,6 @@ class HudComponent extends Component with HasGameReference<TetrisGame> {
   late TextComponent scoreText;
   late TextComponent levelText;
   late TextComponent linesText;
-  late RectangleComponent hudBackground;
   
   @override
   Future<void> onLoad() async {
@@ -19,33 +18,7 @@ class HudComponent extends Component with HasGameReference<TetrisGame> {
     print('🖥️ [SNAPRIX HUD] Carregando HUD INOVADOR - Tela: ${screenWidth.toInt()}x${screenHeight.toInt()}');
     print('📱 [SNAPRIX HUD] SafeArea Top: ${safeAreaTop}px');
     
-    // === HUD SUPERIOR MINIMALISTA - SÓ TÍTULO ===
-    // Fundo compacto só para o título
-    hudBackground = RectangleComponent(
-      size: Vector2(screenWidth, 60), // Muito menor!
-      position: Vector2(0, safeAreaTop),
-      paint: Paint()
-        ..shader = LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            const Color(0xFF000033).withValues(alpha: 0.95),
-            const Color(0xFF000066).withValues(alpha: 0.85),
-          ],
-        ).createShader(Rect.fromLTWH(0, safeAreaTop, screenWidth, 60))
-        ..style = PaintingStyle.fill,
-    );
-    add(hudBackground);
-    
-    // Borda inferior elegante
-    final hudBorder = RectangleComponent(
-      size: Vector2(screenWidth, 2),
-      position: Vector2(0, safeAreaTop + 58),
-      paint: Paint()
-        ..color = const Color(0xFF00FFFF).withValues(alpha: 0.8)
-        ..style = PaintingStyle.fill,
-    );
-    add(hudBorder);
+    // === SEM FUNDO - APENAS TEXTO LIMPO ===
     
     // === STATS NO TOPO HORIZONTAL ===
     _createTopStats(screenWidth, safeAreaTop);
@@ -57,11 +30,14 @@ class HudComponent extends Component with HasGameReference<TetrisGame> {
     final spacing = screenWidth / 4; // Espaçamento horizontal entre stats
     final startX = screenWidth / 2 - spacing; // Começa um pouco à esquerda do centro
     
+    // Cor das bordas (ciano)
+    const borderColor = Color(0xFF00FFFF);
+    
     // === SCORE (Esquerda) ===
     _createHorizontalStat(
       label: 'SCORE',
       value: '0', 
-      color: Colors.white,
+      color: borderColor,
       x: startX,
       y: centerY,
       isScore: true,
@@ -71,7 +47,7 @@ class HudComponent extends Component with HasGameReference<TetrisGame> {
     _createHorizontalStat(
       label: 'LEVEL',
       value: '1',
-      color: const Color(0xFFFF8C00),
+      color: borderColor,
       x: startX + spacing,
       y: centerY,
       isLevel: true,
@@ -81,7 +57,7 @@ class HudComponent extends Component with HasGameReference<TetrisGame> {
     _createHorizontalStat(
       label: 'LINES',
       value: '0',
-      color: const Color(0xFF32CD32),
+      color: borderColor,
       x: startX + (spacing * 2),
       y: centerY,
       isLines: true,
