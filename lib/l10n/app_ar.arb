@@ -82,5 +82,75 @@
   "exitToMenu": "الخروج إلى القائمة",
   "@exitToMenu": {
     "description": "نص زر الخروج إلى القائمة"
+  },
+  
+  "howToPlay": "كيفية اللعب",
+  "@howToPlay": {
+    "description": "عنوان قسم التعليمات"
+  },
+  
+  "tutorialTop": "أعلى",
+  "@tutorialTop": {
+    "description": "التعليمات: لمس المنطقة العلوية"
+  },
+  
+  "tutorialSides": "الجوانب",
+  "@tutorialSides": {
+    "description": "التعليمات: لمس المناطق الجانبية"
+  },
+  
+  "tutorialBottom": "أسفل",
+  "@tutorialBottom": {
+    "description": "التعليمات: لمس المنطقة السفلية"
+  },
+  
+  "tutorialCenter": "وسط+",
+  "@tutorialCenter": {
+    "description": "التعليمات: لمس الوسط + الضغط الطويل"
+  },
+  
+  "tutorialRotate": "دوران",
+  "@tutorialRotate": {
+    "description": "التعليمات: إجراء تدوير القطعة"
+  },
+  
+  "tutorialMove": "تحريك",
+  "@tutorialMove": {
+    "description": "التعليمات: إجراء تحريك القطعة"
+  },
+  
+  "tutorialDrop": "إسقاط",
+  "@tutorialDrop": {
+    "description": "التعليمات: إجراء إسقاط القطعة"
+  },
+  
+  "tutorialPause": "إيقاف",
+  "@tutorialPause": {
+    "description": "التعليمات: إجراء إيقاف اللعبة"
+  },
+  
+  "noButtonsTouch": "✨ بلا أزرار - اللمس فقط!",
+  "@noButtonsTouch": {
+    "description": "التعليمات: التأكيد على التحكم باللمس فقط"
+  },
+  
+  "slogan": "تتريس مع تحكم مثالي باللمس",
+  "@slogan": {
+    "description": "شعار اللعبة"
+  },
+  
+  "featureFast": "سريع",
+  "@featureFast": {
+    "description": "ميزة اللعبة: اللعب السريع"
+  },
+  
+  "featureTouch": "لمس",
+  "@featureTouch": {
+    "description": "ميزة اللعبة: التحكم باللمس"
+  },
+  
+  "featureClassic": "كلاسيكي",
+  "@featureClassic": {
+    "description": "ميزة اللعبة: اللعب الكلاسيكي"
   }
 }

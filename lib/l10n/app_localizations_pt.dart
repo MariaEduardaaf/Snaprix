@@ -58,4 +58,46 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get exitToMenu => 'Sair para Menu';
+
+  @override
+  String get howToPlay => 'COMO JOGAR';
+
+  @override
+  String get tutorialTop => 'TOPO';
+
+  @override
+  String get tutorialSides => 'LATERAIS';
+
+  @override
+  String get tutorialBottom => 'BASE';
+
+  @override
+  String get tutorialCenter => 'CENTRO+';
+
+  @override
+  String get tutorialRotate => 'Girar';
+
+  @override
+  String get tutorialMove => 'Mover';
+
+  @override
+  String get tutorialDrop => 'Descer';
+
+  @override
+  String get tutorialPause => 'Pausar';
+
+  @override
+  String get noButtonsTouch => '✨ Sem botões - Só toque!';
+
+  @override
+  String get slogan => 'Tetris com controles touch perfeitos';
+
+  @override
+  String get featureFast => 'Rápido';
+
+  @override
+  String get featureTouch => 'Touch';
+
+  @override
+  String get featureClassic => 'Clássico';
 }

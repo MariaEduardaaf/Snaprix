@@ -19,7 +19,7 @@ class _MobileControlsState extends State<MobileControls> {
       children: [
         // Controles mínimos - Esquerda
         Positioned(
-          bottom: 80, // Mais alto para não sobrepor o banner
+          bottom: 100, // Desceu um pouco para melhor alcance
           left: 20,
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -57,7 +57,7 @@ class _MobileControlsState extends State<MobileControls> {
         
         // Controles mínimos - Direita
         Positioned(
-          bottom: 80, // Mais alto para não sobrepor o banner
+          bottom: 100, // Desceu um pouco para melhor alcance
           right: 20,
           child: Column(
             mainAxisSize: MainAxisSize.min,

@@ -16,6 +16,7 @@
       "Bash(security find-identity:*)",
       "Bash(xcrun altool:*)"
     ],
-    "deny": []
+    "deny": [],
+    "defaultMode": "acceptEdits"
   }
 }

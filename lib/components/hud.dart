@@ -16,12 +16,13 @@ class HudComponent extends Component with HasGameReference<TetrisGame> {
     // Adiciona espaço para SafeArea (status bar, notch, etc.)
     final safeAreaTop = 50.0; // Espaço seguro no topo
     
-    print('🖥️ [SNAPRIX HUD] Carregando HUD - Tela: ${screenWidth.toInt()}x${screenHeight.toInt()}');
+    print('🖥️ [SNAPRIX HUD] Carregando HUD INOVADOR - Tela: ${screenWidth.toInt()}x${screenHeight.toInt()}');
     print('📱 [SNAPRIX HUD] SafeArea Top: ${safeAreaTop}px');
     
-    // Fundo do HUD mais elegante e compacto
+    // === HUD SUPERIOR MINIMALISTA - SÓ TÍTULO ===
+    // Fundo compacto só para o título
     hudBackground = RectangleComponent(
-      size: Vector2(screenWidth, 100),
+      size: Vector2(screenWidth, 60), // Muito menor!
       position: Vector2(0, safeAreaTop),
       paint: Paint()
         ..shader = LinearGradient(
@@ -31,7 +32,7 @@ class HudComponent extends Component with HasGameReference<TetrisGame> {
             const Color(0xFF000033).withValues(alpha: 0.95),
             const Color(0xFF000066).withValues(alpha: 0.85),
           ],
-        ).createShader(Rect.fromLTWH(0, safeAreaTop, screenWidth, 100))
+        ).createShader(Rect.fromLTWH(0, safeAreaTop, screenWidth, 60))
         ..style = PaintingStyle.fill,
     );
     add(hudBackground);
@@ -39,130 +40,111 @@ class HudComponent extends Component with HasGameReference<TetrisGame> {
     // Borda inferior elegante
     final hudBorder = RectangleComponent(
       size: Vector2(screenWidth, 2),
-      position: Vector2(0, safeAreaTop + 98),
+      position: Vector2(0, safeAreaTop + 58),
       paint: Paint()
         ..color = const Color(0xFF00FFFF).withValues(alpha: 0.8)
         ..style = PaintingStyle.fill,
     );
     add(hudBorder);
     
-    // Título elegante no centro
-    final titleText = TextComponent(
-      text: 'SNAPRIX',
+    // === STATS NO TOPO HORIZONTAL ===
+    _createTopStats(screenWidth, safeAreaTop);
+  }
+  
+  void _createTopStats(double screenWidth, double safeAreaTop) {
+    // Posicionamento horizontal dos stats no topo
+    final centerY = safeAreaTop + 30; // Mesma altura onde estava o título
+    final spacing = screenWidth / 4; // Espaçamento horizontal entre stats
+    final startX = screenWidth / 2 - spacing; // Começa um pouco à esquerda do centro
+    
+    // === SCORE (Esquerda) ===
+    _createHorizontalStat(
+      label: 'SCORE',
+      value: '0', 
+      color: Colors.white,
+      x: startX,
+      y: centerY,
+      isScore: true,
+    );
+    
+    // === LEVEL (Centro) ===
+    _createHorizontalStat(
+      label: 'LEVEL',
+      value: '1',
+      color: const Color(0xFFFF8C00),
+      x: startX + spacing,
+      y: centerY,
+      isLevel: true,
+    );
+    
+    // === LINES (Direita) ===
+    _createHorizontalStat(
+      label: 'LINES',
+      value: '0',
+      color: const Color(0xFF32CD32),
+      x: startX + (spacing * 2),
+      y: centerY,
+      isLines: true,
+    );
+  }
+  
+  void _createHorizontalStat({
+    required String label,
+    required String value,
+    required Color color,
+    required double x,
+    required double y,
+    bool isScore = false,
+    bool isLevel = false,
+    bool isLines = false,
+  }) {
+    // Label (nome do stat)
+    final labelComponent = TextComponent(
+      text: label,
       textRenderer: TextPaint(
-        style: const TextStyle(
-          color: Color(0xFF00FFFF),
-          fontSize: 22,
+        style: TextStyle(
+          color: color.withValues(alpha: 0.8),
+          fontSize: 10,
+          fontWeight: FontWeight.w600,
+          letterSpacing: 1.0,
+        ),
+      ),
+      position: Vector2(x, y - 8),
+      anchor: Anchor.center,
+    );
+    add(labelComponent);
+    
+    // Valor (número)
+    final valueComponent = TextComponent(
+      text: value,
+      textRenderer: TextPaint(
+        style: TextStyle(
+          color: color,
+          fontSize: 18,
           fontWeight: FontWeight.bold,
-          letterSpacing: 3.0,
           shadows: [
             Shadow(
-              color: Color(0xFF0066FF),
-              offset: Offset(2, 2),
-              blurRadius: 4,
+              color: color.withValues(alpha: 0.3),
+              offset: const Offset(0, 0),
+              blurRadius: 8,
+            ),
+            Shadow(
+              offset: const Offset(1, 1),
+              color: Colors.black.withValues(alpha: 0.5),
+              blurRadius: 2,
             ),
           ],
         ),
       ),
-      position: Vector2(screenWidth / 2, safeAreaTop + 35),
+      position: Vector2(x, y + 8),
       anchor: Anchor.center,
     );
-    add(titleText);
+    add(valueComponent);
     
-    // Layout bem distribuído em três colunas
-    final leftX = screenWidth * 0.15;   // 15% da tela (score)
-    final centerX = screenWidth * 0.5;  // 50% da tela (level)
-    final rightX = screenWidth * 0.85;  // 85% da tela (lines)
-    
-    // === SCORE (Esquerda) ===
-    final scoreLabel = TextComponent(
-      text: 'SCORE',
-      textRenderer: TextPaint(
-        style: const TextStyle(
-          color: Color(0xFFAAAAAA),
-          fontSize: 11,
-          fontWeight: FontWeight.w600,
-          letterSpacing: 1.0,
-        ),
-      ),
-      position: Vector2(leftX, safeAreaTop + 70),
-      anchor: Anchor.center,
-    );
-    add(scoreLabel);
-    
-    scoreText = TextComponent(
-      text: '0',
-      textRenderer: TextPaint(
-        style: const TextStyle(
-          color: Colors.white,
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-      position: Vector2(leftX, safeAreaTop + 105),
-      anchor: Anchor.center,
-    );
-    add(scoreText);
-    
-    // === LEVEL (Centro) ===
-    final levelLabel = TextComponent(
-      text: 'LEVEL',
-      textRenderer: TextPaint(
-        style: const TextStyle(
-          color: Color(0xFFAAAAAA),
-          fontSize: 11,
-          fontWeight: FontWeight.w600,
-          letterSpacing: 1.0,
-        ),
-      ),
-      position: Vector2(centerX, safeAreaTop + 70),
-      anchor: Anchor.center,
-    );
-    add(levelLabel);
-    
-    levelText = TextComponent(
-      text: '1',
-      textRenderer: TextPaint(
-        style: const TextStyle(
-          color: Color(0xFFFF8C00),
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-      position: Vector2(centerX, safeAreaTop + 105),
-      anchor: Anchor.center,
-    );
-    add(levelText);
-    
-    // === LINES (Direita) ===
-    final linesLabel = TextComponent(
-      text: 'LINES',
-      textRenderer: TextPaint(
-        style: const TextStyle(
-          color: Color(0xFFAAAAAA),
-          fontSize: 11,
-          fontWeight: FontWeight.w600,
-          letterSpacing: 1.0,
-        ),
-      ),
-      position: Vector2(rightX, safeAreaTop + 70),
-      anchor: Anchor.center,
-    );
-    add(linesLabel);
-    
-    linesText = TextComponent(
-      text: '0',
-      textRenderer: TextPaint(
-        style: const TextStyle(
-          color: Color(0xFF32CD32),
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-      position: Vector2(rightX, safeAreaTop + 105),
-      anchor: Anchor.center,
-    );
-    add(linesText);
+    // Guardar referência para atualização
+    if (isScore) scoreText = valueComponent;
+    if (isLevel) levelText = valueComponent;
+    if (isLines) linesText = valueComponent;
   }
   
   @override

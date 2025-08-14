@@ -7,6 +7,7 @@ import 'overlays/main_menu.dart';
 import 'overlays/pause_menu.dart';
 import 'overlays/game_over_menu.dart';
 import 'overlays/mobile_controls.dart';
+import 'overlays/advanced_touch_controls.dart';
 import 'l10n/app_localizations.dart';
 import 'services/ad_service.dart';
 
@@ -52,6 +53,7 @@ void main() async {
           'PauseMenu': (_, game) => PauseMenu(game: game),
           'GameOver': (_, game) => GameOverMenu(game: game),
           'MobileControls': (_, game) => MobileControls(game: game),
+          'AdvancedTouchControls': (_, game) => AdvancedTouchControls(game: game),
         },
         initialActiveOverlays: const ['MainMenu'],
       ),

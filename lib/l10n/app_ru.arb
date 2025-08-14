@@ -82,5 +82,75 @@
   "exitToMenu": "ВЫЙТИ В МЕНЮ",
   "@exitToMenu": {
     "description": "Текст кнопки выхода в меню"
+  },
+  
+  "howToPlay": "КАК ИГРАТЬ",
+  "@howToPlay": {
+    "description": "Заголовок раздела обучения"
+  },
+  
+  "tutorialTop": "ВЕРХ",
+  "@tutorialTop": {
+    "description": "Обучение: касание верхней области"
+  },
+  
+  "tutorialSides": "БОКА",
+  "@tutorialSides": {
+    "description": "Обучение: касание боковых областей"
+  },
+  
+  "tutorialBottom": "НИЗ",
+  "@tutorialBottom": {
+    "description": "Обучение: касание нижней области"
+  },
+  
+  "tutorialCenter": "ЦЕНТР+",
+  "@tutorialCenter": {
+    "description": "Обучение: касание центра + долгое нажатие"
+  },
+  
+  "tutorialRotate": "Вращать",
+  "@tutorialRotate": {
+    "description": "Обучение: действие поворота фигуры"
+  },
+  
+  "tutorialMove": "Двигать",
+  "@tutorialMove": {
+    "description": "Обучение: действие перемещения фигуры"
+  },
+  
+  "tutorialDrop": "Падение",
+  "@tutorialDrop": {
+    "description": "Обучение: действие ускорения фигуры"
+  },
+  
+  "tutorialPause": "Пауза",
+  "@tutorialPause": {
+    "description": "Обучение: действие паузы игры"
+  },
+  
+  "noButtonsTouch": "✨ Без кнопок - Только касание!",
+  "@noButtonsTouch": {
+    "description": "Обучение: подчеркивает сенсорное управление"
+  },
+  
+  "slogan": "Тетрис с идеальным сенсорным управлением",
+  "@slogan": {
+    "description": "Слоган игры"
+  },
+  
+  "featureFast": "Быстро",
+  "@featureFast": {
+    "description": "Особенность игры: быстрый геймплей"
+  },
+  
+  "featureTouch": "Касание",
+  "@featureTouch": {
+    "description": "Особенность игры: сенсорное управление"
+  },
+  
+  "featureClassic": "Классика",
+  "@featureClassic": {
+    "description": "Особенность игры: классический геймплей"
   }
 }

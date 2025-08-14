@@ -140,39 +140,100 @@ class MainMenu extends StatelessWidget {
                     ),
                   ),
                   
-                  const SizedBox(height: 60),
+                  const SizedBox(height: 25),
                   
-                  // Slogan elegante
+                  // ===== TUTORIAL COMPACTO =====
                   Container(
-                    constraints: BoxConstraints(maxWidth: isSmallScreen ? 280 : 350),
-                    child: Text(
-                      'O clássico jogo de quebra-cabeças\nreimaginado para a era digital',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: isSmallScreen ? 14 : 16,
-                        color: Colors.white.withValues(alpha: 0.8),
-                        height: 1.6,
-                        fontWeight: FontWeight.w300,
-                        letterSpacing: 0.5,
+                    margin: EdgeInsets.symmetric(horizontal: isSmallScreen ? 15 : 25),
+                    padding: EdgeInsets.all(isSmallScreen ? 12 : 15),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withValues(alpha: 0.4),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: const Color(0xFF00FFFF).withValues(alpha: 0.3),
+                        width: 1.5,
                       ),
+                    ),
+                    child: Column(
+                      children: [
+                        Text(
+                          AppLocalizations.of(context)!.howToPlay,
+                          style: TextStyle(
+                            fontSize: isSmallScreen ? 16 : 18,
+                            fontWeight: FontWeight.bold,
+                            color: const Color(0xFF00FFFF),
+                            letterSpacing: 1.5,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        // Tutorial em grid 2x3 para economizar espaço
+                        Row(
+                          children: [
+                            Expanded(child: _buildCompactTutorial('🔄', AppLocalizations.of(context)!.tutorialTop, AppLocalizations.of(context)!.tutorialRotate, isSmallScreen)),
+                            const SizedBox(width: 8),
+                            Expanded(child: _buildCompactTutorial('⬅️➡️', AppLocalizations.of(context)!.tutorialSides, AppLocalizations.of(context)!.tutorialMove, isSmallScreen)),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        Row(
+                          children: [
+                            Expanded(child: _buildCompactTutorial('⬇️', AppLocalizations.of(context)!.tutorialBottom, AppLocalizations.of(context)!.tutorialDrop, isSmallScreen)),
+                            const SizedBox(width: 8),
+                            Expanded(child: _buildCompactTutorial('⏸️', AppLocalizations.of(context)!.tutorialCenter, AppLocalizations.of(context)!.tutorialPause, isSmallScreen)),
+                          ],
+                        ),
+                        const SizedBox(height: 10),
+                        Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: isSmallScreen ? 8 : 10, 
+                            vertical: isSmallScreen ? 6 : 8
+                          ),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF00FFFF).withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Text(
+                            AppLocalizations.of(context)!.noButtonsTouch,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: isSmallScreen ? 11 : 12,
+                              color: const Color(0xFF00FFFF),
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   
-                  const SizedBox(height: 40),
+                  const SizedBox(height: 20),
                   
-                  // Características do jogo
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      _buildFeatureIcon(Icons.speed, 'Rápido', isSmallScreen),
-                      SizedBox(width: isSmallScreen ? 25 : 35),
-                      _buildFeatureIcon(Icons.touch_app, 'Intuitivo', isSmallScreen),
-                      SizedBox(width: isSmallScreen ? 25 : 35),
-                      _buildFeatureIcon(Icons.star, 'Clássico', isSmallScreen),
-                    ],
+                  // Slogan compacto
+                  Text(
+                    AppLocalizations.of(context)!.slogan,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: isSmallScreen ? 13 : 15,
+                      color: Colors.white.withValues(alpha: 0.7),
+                      fontWeight: FontWeight.w300,
+                    ),
                   ),
                   
                   const SizedBox(height: 20),
+                  
+                  // Características compactas
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _buildMiniFeature('⚡', AppLocalizations.of(context)!.featureFast, isSmallScreen),
+                      SizedBox(width: isSmallScreen ? 20 : 25),
+                      _buildMiniFeature('👆', AppLocalizations.of(context)!.featureTouch, isSmallScreen),
+                      SizedBox(width: isSmallScreen ? 20 : 25),
+                      _buildMiniFeature('⭐', AppLocalizations.of(context)!.featureClassic, isSmallScreen),
+                    ],
+                  ),
+                  
+                  const SizedBox(height: 15),
                   
                   // Rodapé
                   Text(
@@ -217,6 +278,67 @@ class MainMenu extends StatelessWidget {
           label,
           style: TextStyle(
             fontSize: isSmallScreen ? 12 : 14,
+            color: Colors.white.withValues(alpha: 0.7),
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ],
+    );
+  }
+  
+  // Tutorial compacto em formato de cartão
+  Widget _buildCompactTutorial(String emoji, String action, String description, bool isSmallScreen) {
+    return Container(
+      padding: EdgeInsets.all(isSmallScreen ? 8 : 10),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.05),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: Colors.white.withValues(alpha: 0.1),
+        ),
+      ),
+      child: Column(
+        children: [
+          Text(
+            emoji,
+            style: TextStyle(fontSize: isSmallScreen ? 16 : 18),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            action,
+            style: TextStyle(
+              fontSize: isSmallScreen ? 10 : 11,
+              fontWeight: FontWeight.w600,
+              color: Colors.white,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          Text(
+            description,
+            style: TextStyle(
+              fontSize: isSmallScreen ? 9 : 10,
+              color: Colors.white.withValues(alpha: 0.8),
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
+  
+  // Característica mini com emoji
+  Widget _buildMiniFeature(String emoji, String label, bool isSmallScreen) {
+    return Column(
+      children: [
+        Text(
+          emoji,
+          style: TextStyle(fontSize: isSmallScreen ? 20 : 24),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: isSmallScreen ? 11 : 12,
             color: Colors.white.withValues(alpha: 0.7),
             fontWeight: FontWeight.w500,
           ),

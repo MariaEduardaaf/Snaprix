@@ -58,4 +58,46 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get exitToMenu => 'الخروج إلى القائمة';
+
+  @override
+  String get howToPlay => 'كيفية اللعب';
+
+  @override
+  String get tutorialTop => 'أعلى';
+
+  @override
+  String get tutorialSides => 'الجوانب';
+
+  @override
+  String get tutorialBottom => 'أسفل';
+
+  @override
+  String get tutorialCenter => 'وسط+';
+
+  @override
+  String get tutorialRotate => 'دوران';
+
+  @override
+  String get tutorialMove => 'تحريك';
+
+  @override
+  String get tutorialDrop => 'إسقاط';
+
+  @override
+  String get tutorialPause => 'إيقاف';
+
+  @override
+  String get noButtonsTouch => '✨ بلا أزرار - اللمس فقط!';
+
+  @override
+  String get slogan => 'تتريس مع تحكم مثالي باللمس';
+
+  @override
+  String get featureFast => 'سريع';
+
+  @override
+  String get featureTouch => 'لمس';
+
+  @override
+  String get featureClassic => 'كلاسيكي';
 }

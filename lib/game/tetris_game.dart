@@ -11,6 +11,7 @@ import '../components/tetromino.dart';
 import '../components/game_board.dart';
 import '../components/hud.dart';
 import '../utils/constants.dart';
+import '../services/sound_service.dart';
 
 class TetrisGame extends FlameGame with HasKeyboardHandlerComponents, HasCollisionDetection {
   // Tamanho do tabuleiro em células (colunas x linhas)
@@ -70,21 +71,22 @@ class TetrisGame extends FlameGame with HasKeyboardHandlerComponents, HasCollisi
     gameBoard = GameBoard();
     hud = HudComponent();
     
-    // Separação clara entre HUD e tabuleiro
+    // Separação clara entre HUD e tabuleiro - LAYOUT REVOLUCIONÁRIO
     final boardWidth = columns * cellSize;
     final boardHeight = rows * cellSize;
     final safeAreaTop = 50.0; // Mesmo valor usado no HUD
-    final hudHeight = 100.0; // Altura fixa do HUD
-    final hudTotalHeight = safeAreaTop + hudHeight; // Altura total ocupada pelo HUD: 150px
-    final separationMargin = 120.0; // Margem otimizada para tabuleiro menor
-    final controlsMargin = 150.0; // Margem inferior para os controles mobile
+    final hudHeight = 60.0; // HUD COMPACTO - só título SNAPRIX
+    final hudTotalHeight = safeAreaTop + hudHeight; // Altura total ocupada pelo HUD: 110px
+    final separationMargin = 40.0; // Margem menor - stats agora estão no topo
+    final controlsMargin = 180.0; // MAIS margem para evitar contato com banner
+    final horizontalMargin = 5.0; // Margem MÍNIMA nas laterais para MAXIMIZAR tabuleiro
     
     // Tabuleiro começa DEPOIS do HUD + margem de separação  
-    final boardStartY = hudTotalHeight + separationMargin; // 150 + 120 = 270px do topo
+    final boardStartY = hudTotalHeight + separationMargin; // 110 + 40 = 150px do topo
     final availableGameHeight = size.y - boardStartY - controlsMargin;
     final verticalOffset = boardStartY + (availableGameHeight - boardHeight) / 2;
     
-    // Centraliza horizontalmente com margem mínima
+    // CENTRALIZAÇÃO HORIZONTAL - stats no topo liberam as laterais
     final horizontalOffset = (size.x - boardWidth) / 2;
     
     gameBoard.position = Vector2(
@@ -92,47 +94,45 @@ class TetrisGame extends FlameGame with HasKeyboardHandlerComponents, HasCollisi
       verticalOffset,
     );
     
-    print('🎯 [SNAPRIX] Tabuleiro PERFEITAMENTE separado: ${gameBoard.position}, tamanho: ${boardWidth.toInt()}x${boardHeight.toInt()}');
-    print('📱 [SNAPRIX] HUD: 0-${hudTotalHeight.toInt()}px | Separação EXTRA: ${separationMargin.toInt()}px | Tabuleiro: ${boardStartY.toInt()}px+ | Controles: ${controlsMargin}px');
+    print('🎯 [SNAPRIX] LAYOUT FINAL - Tabuleiro centralizado: ${gameBoard.position}, tamanho: ${boardWidth.toInt()}x${boardHeight.toInt()}');
+    print('📱 [SNAPRIX] Stats no topo: 0-${hudTotalHeight.toInt()}px | Tabuleiro: ${boardStartY.toInt()}px+ | Banner+Controles: ${controlsMargin.toInt()}px');
     
     add(gameBoard);
     add(hud);
     add(KeyboardControllerComponent());
     
-    // Adiciona componente de arrastar que cobre toda a tela
-    final dragController = DragControllerComponent()
-      ..size = size
-      ..position = Vector2.zero();
-    add(dragController);
+    // Sistema de controles touch avançado implementado via overlays
+    // Não precisa mais do DragController antigo
   }
   
   void _calculateCellSize() {
-    // Calcula o tamanho da célula para usar MÁXIMO espaço disponível
+    // LAYOUT REVOLUCIONÁRIO - Calcula célula para máxima área de jogo
     final screenWidth = size.x;
     final screenHeight = size.y;
     
-    // Otimizado para usar TELA CHEIA
-    final hudSpace = 100; // HUD mais compacto
-    final controlsSpace = 160; // Espaço para controles na parte inferior
+    // LAYOUT CENTRADO: Stats no topo + tabuleiro centralizado
+    final hudSpace = 60 + 50 + 40; // HUD (60) + SafeArea (50) + separação (40) = 150px
+    final controlsSpace = 180; // MAIS espaço para controles + banner
+    final horizontalMargin = 10; // Margem MÍNIMA para maximizar tabuleiro
     final safetyMargin = 20; // Margem mínima
     
     final availableHeight = screenHeight - hudSpace - controlsSpace - safetyMargin;
-    final availableWidth = screenWidth * 0.95; // Usar 95% da largura
+    final availableWidth = screenWidth - (horizontalMargin * 2); // Margens simétricas
     
     // Calcula baseado nas dimensões do tabuleiro
     final cellSizeByWidth = availableWidth / columns;
     final cellSizeByHeight = availableHeight / rows;
     
-    // Usa o menor para manter proporção mas maximiza o uso
+    // Usa o menor para manter proporção mas MAXIMIZA o espaço
     cellSize = min(cellSizeByWidth, cellSizeByHeight);
     
-    // Tamanho reduzido para tabuleiro menor
-    cellSize = max(cellSize, 28.0);
+    // Tamanho mínimo aumentado para aproveitar o espaço extra
+    cellSize = max(cellSize, 34.0);
     
-    // Limita o tamanho máximo para não ficar muito grande
-    cellSize = min(cellSize, 32.0);
+    // Tamanho máximo MÁXIMO - tabuleiro GIGANTE nas laterais
+    cellSize = min(cellSize, 44.0);
     
-    print('🎯 [SNAPRIX] TELA CHEIA - Célula: ${cellSize.toStringAsFixed(1)}px');
+    print('🎯 [SNAPRIX] LAYOUT REVOLUCIONÁRIO - Célula: ${cellSize.toStringAsFixed(1)}px');
     print('📱 [SNAPRIX] Tela: ${screenWidth.toInt()}x${screenHeight.toInt()}');
     print('🏗️ [SNAPRIX] Tabuleiro: ${(cellSize * columns).toInt()}x${(cellSize * rows).toInt()}');
     print('📊 [SNAPRIX] Aproveitamento: ${((cellSize * columns * cellSize * rows) / (screenWidth * screenHeight) * 100).toStringAsFixed(1)}%');
@@ -204,9 +204,9 @@ class TetrisGame extends FlameGame with HasKeyboardHandlerComponents, HasCollisi
       currentPiece = null;
     }
     
-    // Adicionar controles mobile
-    overlays.add('MobileControls');
-    print('🎮 [SNAPRIX] Controles mobile ativados');
+    // Adicionar controles touch avançados
+    overlays.add('AdvancedTouchControls');
+    print('🎮 [SNAPRIX] Controles touch AVANÇADOS ativados');
     
     // Inicia música de fundo
     startBackgroundMusic();
@@ -225,14 +225,14 @@ class TetrisGame extends FlameGame with HasKeyboardHandlerComponents, HasCollisi
     isPaused = true;
     pauseBackgroundMusic();
     pauseEngine(); // pausa o loop do jogo
-    overlays.remove('MobileControls');
+    overlays.remove('AdvancedTouchControls');
     overlays.add('PauseMenu');
   }
   
   void resumeGame() {
     isPaused = false;
     overlays.remove('PauseMenu');
-    overlays.add('MobileControls');
+    overlays.add('AdvancedTouchControls');
     resumeBackgroundMusic();
     resumeEngine(); // retoma o loop do jogo
   }
@@ -256,7 +256,7 @@ class TetrisGame extends FlameGame with HasKeyboardHandlerComponents, HasCollisi
     // Limpa overlays
     overlays.remove('PauseMenu');
     overlays.remove('GameOver');
-    overlays.remove('MobileControls');
+    overlays.remove('AdvancedTouchControls');
     
     // Para a música de fundo
     stopBackgroundMusic();
@@ -367,6 +367,7 @@ class TetrisGame extends FlameGame with HasKeyboardHandlerComponents, HasCollisi
         level++;
         // aumenta a velocidade (diminui intervalo de queda, nunca abaixo de certo limite)
         dropInterval = max(0.1, dropInterval * 0.8); // por ex., aumenta 20% a velocidade
+        SoundService.playLevelUp(); // Toca som de level up
         print('⬆️ [SNAPRIX] Level up! Nível $level (Velocidade: ${dropInterval.toStringAsFixed(2)}s)');
       }
     }
@@ -379,7 +380,7 @@ class TetrisGame extends FlameGame with HasKeyboardHandlerComponents, HasCollisi
     stopBackgroundMusic();
     pauseEngine();  // pausa o loop do jogo
     // Remove controles e ativa overlay de Game Over
-    overlays.remove('MobileControls');
+    overlays.remove('AdvancedTouchControls');
     overlays.add('GameOver');
   }
   
@@ -523,12 +524,32 @@ class TetrisGame extends FlameGame with HasKeyboardHandlerComponents, HasCollisi
   }
   
   void playSound(String soundName) {
-    // Som desabilitado temporariamente
-    // try {
-    //   FlameAudio.play(soundName);
-    // } catch (e) {
-    //   print('Som $soundName não encontrado: $e');
-    // }
+    try {
+      // Sistema de efeitos sonoros reais usando SoundService
+      switch (soundName) {
+        case 'move.mp3':
+          SoundService.playMove();
+          break;
+        case 'rotate.mp3':
+          SoundService.playRotate();
+          break;
+        case 'drop.mp3':
+          SoundService.playDrop();
+          break;
+        case 'line_clear.mp3':
+          SoundService.playLineClear();
+          break;
+        case 'game_over.mp3':
+          SoundService.playGameOver();
+          break;
+        case 'hold.mp3':
+          SoundService.playHold();
+          break;
+      }
+      print('🔊 [SNAPRIX] Som: $soundName (efeitos sonoros procedurais)');
+    } catch (e) {
+      print('Som $soundName erro: $e');
+    }
   }
   
   // Controles de música de fundo
@@ -614,135 +635,8 @@ class KeyboardControllerComponent extends Component
   }
 }
 
-// Sistema de Detecção da Direção REAL do Movimento
-class DragControllerComponent extends RectangleComponent with HasGameReference<TetrisGame>, TapCallbacks, DragCallbacks {
-  Vector2? _startPos;
-  Vector2? _dragStartPos;
-  double _startTime = 0;
-  bool _wasDrag = false;
-  
-  @override
-  Future<void> onLoad() async {
-    paint = Paint()..color = const Color(0x00000000);
-    print('🎮 [SNAPRIX] REAL Movement Direction Controller loaded');
-  }
-  
-  @override
-  bool onTapDown(TapDownEvent event) {
-    if (!game.gameStarted || game.isPaused || game.isGameOver) return false;
-    
-    _startPos = event.canvasPosition;
-    _startTime = DateTime.now().millisecondsSinceEpoch / 1000.0;
-    _wasDrag = false;
-    
-    print('👆 [SNAPRIX] Touch Down: ${event.canvasPosition}');
-    return true;
-  }
-  
-  @override
-  bool onTapUp(TapUpEvent event) {
-    if (!game.gameStarted || game.isPaused || game.isGameOver || _startPos == null || _wasDrag) return false;
-    
-    final duration = DateTime.now().millisecondsSinceEpoch / 1000.0 - _startTime;
-    final endPos = event.canvasPosition;
-    
-    // DETECÇÃO REAL DA DIREÇÃO DO MOVIMENTO
-    final deltaX = endPos.x - _startPos!.x;
-    final deltaY = endPos.y - _startPos!.y;
-    final distance = sqrt(deltaX * deltaX + deltaY * deltaY);
-    
-    print('👆 [SNAPRIX] Touch Up: start=$_startPos, end=$endPos');
-    print('👆 [SNAPRIX] Real Movement Analysis: deltaX=${deltaX.toStringAsFixed(1)}, deltaY=${deltaY.toStringAsFixed(1)}, distance=${distance.toStringAsFixed(1)}, duration=${duration.toStringAsFixed(2)}s');
-    
-    // DETECÇÃO BASEADA NO MOVIMENTO REAL DO DEDO - MAIS SENSÍVEL
-    if (distance > 8) { // Reduzido de 15 para 8 pixels - muito mais sensível
-      if (deltaX.abs() > deltaY.abs()) {
-        // Movimento horizontal predominante
-        if (deltaX > 0) {
-          // MOVIMENTO REAL PARA DIREITA (deltaX positivo)
-          game.movePieceRight();
-          print('➡️ [SNAPRIX] REAL Movement RIGHT detected! Finger moved ${deltaX.toStringAsFixed(1)}px to the right');
-        } else {
-          // MOVIMENTO REAL PARA ESQUERDA (deltaX negativo)
-          game.movePieceLeft();
-          print('⬅️ [SNAPRIX] REAL Movement LEFT detected! Finger moved ${deltaX.abs().toStringAsFixed(1)}px to the left');
-        }
-      } else {
-        // Movimento vertical predominante
-        if (deltaY > 0) {
-          // Movimento para baixo
-          game.movePieceDown();
-          print('⬇️ [SNAPRIX] REAL Movement DOWN detected! Finger moved ${deltaY.toStringAsFixed(1)}px down');
-        }
-      }
-    }
-    // Se não houve movimento significativo, é um tap
-    else if (distance < 8) { // Ajustado para 8 pixels também
-      if (duration < 0.2) { // Reduzido de 0.3 para 0.2s - tap mais rápido
-        game.rotatePiece();
-        print('🔄 [SNAPRIX] Tap Rotate! (no significant movement)');
-      } else if (duration > 0.4) { // Reduzido de 0.5 para 0.4s - long press mais rápido
-        game.hardDrop();
-        print('🔽 [SNAPRIX] Long Press Hard Drop! (no significant movement)');
-      }
-    }
-    
-    _startPos = null;
-    return true;
-  }
-  
-  @override
-  bool onDragStart(DragStartEvent event) {
-    super.onDragStart(event);
-    if (!game.gameStarted || game.isPaused || game.isGameOver) return false;
-    
-    _dragStartPos = event.canvasPosition;
-    _startTime = DateTime.now().millisecondsSinceEpoch / 1000.0;
-    _wasDrag = true;
-    
-    print('🖱️ [SNAPRIX] Drag Start: ${event.canvasPosition}');
-    return true;
-  }
-  
-  @override
-  bool onDragEnd(DragEndEvent event) {
-    super.onDragEnd(event);
-    if (!game.gameStarted || game.isPaused || game.isGameOver || _dragStartPos == null) return false;
-    
-    print('🖱️ [SNAPRIX] Drag End: analyzing movement from drag...');
-    
-    // Para drags, não temos acesso à posição final no Flame
-    // Mas podemos usar uma heurística temporal mais inteligente
-    final currentTime = DateTime.now().millisecondsSinceEpoch / 1000.0;
-    final dragDuration = currentTime - _startTime;
-    
-    // Se foi um drag rápido horizontal, executa movimento baseado na análise de timing - MAIS SENSÍVEL
-    if (dragDuration > 0.03 && dragDuration < 0.6) { // Reduzido mínimo de 0.05 para 0.03s, aumentado máximo para 0.6s
-      // Usar a posição inicial do drag como referência
-      final startX = _dragStartPos!.x;
-      final screenWidth = game.size.x;
-      final centerX = screenWidth / 2;
-      
-      // Se está muito próximo do centro, rotaciona - zona central menor
-      if ((startX - centerX).abs() < screenWidth * 0.12) { // Reduzido de 0.15 para 0.12 - zona central menor
-        game.rotatePiece();
-        print('🔄 [SNAPRIX] Center drag - Rotate!');
-      }
-      // Se está mais para as laterais, move baseado na posição
-      else if (startX < centerX) {
-        game.movePieceLeft();
-        print('⬅️ [SNAPRIX] Left area drag - Move Left!');
-      } else {
-        game.movePieceRight();
-        print('➡️ [SNAPRIX] Right area drag - Move Right!');
-      }
-    }
-    
-    _dragStartPos = null;
-    _wasDrag = false;
-    return true;
-  }
-}
+// SISTEMA ANTIGO DE CONTROLES REMOVIDO
+// Agora usamos apenas AdvancedTouchControls via overlays
 
 // Fundo animado do jogo
 class AnimatedBackground extends Component with HasGameReference<TetrisGame> {

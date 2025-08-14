@@ -40,6 +40,7 @@ dependencies:
   flame_audio: ^2.11.6
   intl: ^0.20.2
   google_mobile_ads: ^5.2.0
+  app_tracking_transparency: ^2.0.5
 
 dev_dependencies:
   flutter_test:

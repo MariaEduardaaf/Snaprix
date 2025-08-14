@@ -58,4 +58,46 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get exitToMenu => 'メニューに戻る';
+
+  @override
+  String get howToPlay => '遊び方';
+
+  @override
+  String get tutorialTop => '上部';
+
+  @override
+  String get tutorialSides => '左右';
+
+  @override
+  String get tutorialBottom => '下部';
+
+  @override
+  String get tutorialCenter => '中央+';
+
+  @override
+  String get tutorialRotate => '回転';
+
+  @override
+  String get tutorialMove => '移動';
+
+  @override
+  String get tutorialDrop => '落下';
+
+  @override
+  String get tutorialPause => '一時停止';
+
+  @override
+  String get noButtonsTouch => '✨ ボタン無し - タッチのみ！';
+
+  @override
+  String get slogan => '完璧なタッチコントロールのテトリス';
+
+  @override
+  String get featureFast => '高速';
+
+  @override
+  String get featureTouch => 'タッチ';
+
+  @override
+  String get featureClassic => 'クラシック';
 }

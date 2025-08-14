@@ -207,6 +207,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Exit to Menu'**
   String get exitToMenu;
+
+  /// Tutorial section title
+  ///
+  /// In en, this message translates to:
+  /// **'HOW TO PLAY'**
+  String get howToPlay;
+
+  /// Tutorial: touch top area
+  ///
+  /// In en, this message translates to:
+  /// **'TOP'**
+  String get tutorialTop;
+
+  /// Tutorial: touch sides area
+  ///
+  /// In en, this message translates to:
+  /// **'SIDES'**
+  String get tutorialSides;
+
+  /// Tutorial: touch bottom area
+  ///
+  /// In en, this message translates to:
+  /// **'BOTTOM'**
+  String get tutorialBottom;
+
+  /// Tutorial: touch center area + long press
+  ///
+  /// In en, this message translates to:
+  /// **'CENTER+'**
+  String get tutorialCenter;
+
+  /// Tutorial: rotate piece action
+  ///
+  /// In en, this message translates to:
+  /// **'Rotate'**
+  String get tutorialRotate;
+
+  /// Tutorial: move piece action
+  ///
+  /// In en, this message translates to:
+  /// **'Move'**
+  String get tutorialMove;
+
+  /// Tutorial: drop piece action
+  ///
+  /// In en, this message translates to:
+  /// **'Drop'**
+  String get tutorialDrop;
+
+  /// Tutorial: pause game action
+  ///
+  /// In en, this message translates to:
+  /// **'Pause'**
+  String get tutorialPause;
+
+  /// Tutorial: emphasizes touch-only controls
+  ///
+  /// In en, this message translates to:
+  /// **'✨ No buttons - Just touch!'**
+  String get noButtonsTouch;
+
+  /// Game slogan/tagline
+  ///
+  /// In en, this message translates to:
+  /// **'Tetris with perfect touch controls'**
+  String get slogan;
+
+  /// Game feature: fast gameplay
+  ///
+  /// In en, this message translates to:
+  /// **'Fast'**
+  String get featureFast;
+
+  /// Game feature: touch controls
+  ///
+  /// In en, this message translates to:
+  /// **'Touch'**
+  String get featureTouch;
+
+  /// Game feature: classic gameplay
+  ///
+  /// In en, this message translates to:
+  /// **'Classic'**
+  String get featureClassic;
 }
 
 class _AppLocalizationsDelegate

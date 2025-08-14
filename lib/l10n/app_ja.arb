@@ -82,5 +82,75 @@
   "exitToMenu": "メニューに戻る",
   "@exitToMenu": {
     "description": "メニューに戻るボタンのテキスト"
+  },
+  
+  "howToPlay": "遊び方",
+  "@howToPlay": {
+    "description": "チュートリアルセクションのタイトル"
+  },
+  
+  "tutorialTop": "上部",
+  "@tutorialTop": {
+    "description": "チュートリアル: 上部エリアをタッチ"
+  },
+  
+  "tutorialSides": "左右",
+  "@tutorialSides": {
+    "description": "チュートリアル: 左右エリアをタッチ"
+  },
+  
+  "tutorialBottom": "下部",
+  "@tutorialBottom": {
+    "description": "チュートリアル: 下部エリアをタッチ"
+  },
+  
+  "tutorialCenter": "中央+",
+  "@tutorialCenter": {
+    "description": "チュートリアル: 中央をタッチ + 長押し"
+  },
+  
+  "tutorialRotate": "回転",
+  "@tutorialRotate": {
+    "description": "チュートリアル: ピースを回転させるアクション"
+  },
+  
+  "tutorialMove": "移動",
+  "@tutorialMove": {
+    "description": "チュートリアル: ピースを移動させるアクション"
+  },
+  
+  "tutorialDrop": "落下",
+  "@tutorialDrop": {
+    "description": "チュートリアル: ピースを落下させるアクション"
+  },
+  
+  "tutorialPause": "一時停止",
+  "@tutorialPause": {
+    "description": "チュートリアル: ゲームを一時停止するアクション"
+  },
+  
+  "noButtonsTouch": "✨ ボタン無し - タッチのみ！",
+  "@noButtonsTouch": {
+    "description": "チュートリアル: タッチ専用コントロールを強調"
+  },
+  
+  "slogan": "完璧なタッチコントロールのテトリス",
+  "@slogan": {
+    "description": "ゲームのスローガン"
+  },
+  
+  "featureFast": "高速",
+  "@featureFast": {
+    "description": "ゲーム機能: 高速ゲームプレイ"
+  },
+  
+  "featureTouch": "タッチ",
+  "@featureTouch": {
+    "description": "ゲーム機能: タッチコントロール"
+  },
+  
+  "featureClassic": "クラシック",
+  "@featureClassic": {
+    "description": "ゲーム機能: クラシックゲームプレイ"
   }
 }

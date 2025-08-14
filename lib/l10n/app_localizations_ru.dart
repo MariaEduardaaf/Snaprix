@@ -58,4 +58,46 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get exitToMenu => 'ВЫЙТИ В МЕНЮ';
+
+  @override
+  String get howToPlay => 'КАК ИГРАТЬ';
+
+  @override
+  String get tutorialTop => 'ВЕРХ';
+
+  @override
+  String get tutorialSides => 'БОКА';
+
+  @override
+  String get tutorialBottom => 'НИЗ';
+
+  @override
+  String get tutorialCenter => 'ЦЕНТР+';
+
+  @override
+  String get tutorialRotate => 'Вращать';
+
+  @override
+  String get tutorialMove => 'Двигать';
+
+  @override
+  String get tutorialDrop => 'Падение';
+
+  @override
+  String get tutorialPause => 'Пауза';
+
+  @override
+  String get noButtonsTouch => '✨ Без кнопок - Только касание!';
+
+  @override
+  String get slogan => 'Тетрис с идеальным сенсорным управлением';
+
+  @override
+  String get featureFast => 'Быстро';
+
+  @override
+  String get featureTouch => 'Касание';
+
+  @override
+  String get featureClassic => 'Классика';
 }

@@ -82,5 +82,75 @@
   "exitToMenu": "Exit to Menu",
   "@exitToMenu": {
     "description": "Exit to menu button text"
+  },
+  
+  "howToPlay": "HOW TO PLAY",
+  "@howToPlay": {
+    "description": "Tutorial section title"
+  },
+  
+  "tutorialTop": "TOP",
+  "@tutorialTop": {
+    "description": "Tutorial: touch top area"
+  },
+  
+  "tutorialSides": "SIDES",
+  "@tutorialSides": {
+    "description": "Tutorial: touch sides area"
+  },
+  
+  "tutorialBottom": "BOTTOM",
+  "@tutorialBottom": {
+    "description": "Tutorial: touch bottom area"
+  },
+  
+  "tutorialCenter": "CENTER+",
+  "@tutorialCenter": {
+    "description": "Tutorial: touch center area + long press"
+  },
+  
+  "tutorialRotate": "Rotate",
+  "@tutorialRotate": {
+    "description": "Tutorial: rotate piece action"
+  },
+  
+  "tutorialMove": "Move",
+  "@tutorialMove": {
+    "description": "Tutorial: move piece action"
+  },
+  
+  "tutorialDrop": "Drop",
+  "@tutorialDrop": {
+    "description": "Tutorial: drop piece action"
+  },
+  
+  "tutorialPause": "Pause",
+  "@tutorialPause": {
+    "description": "Tutorial: pause game action"
+  },
+  
+  "noButtonsTouch": "✨ No buttons - Just touch!",
+  "@noButtonsTouch": {
+    "description": "Tutorial: emphasizes touch-only controls"
+  },
+  
+  "slogan": "Tetris with perfect touch controls",
+  "@slogan": {
+    "description": "Game slogan/tagline"
+  },
+  
+  "featureFast": "Fast",
+  "@featureFast": {
+    "description": "Game feature: fast gameplay"
+  },
+  
+  "featureTouch": "Touch",
+  "@featureTouch": {
+    "description": "Game feature: touch controls"
+  },
+  
+  "featureClassic": "Classic",
+  "@featureClassic": {
+    "description": "Game feature: classic gameplay"
   }
 }
