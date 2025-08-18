@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../game/tetris_game.dart';
-import 'ad_banner.dart';
 
 /// Sistema de Controles Touch PERFEITO para Tetris Mobile
 /// Baseado nas melhores práticas da indústria e pesquisa avançada
@@ -120,7 +119,7 @@ class _AdvancedTouchControlsState extends State<AdvancedTouchControls> {
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 8),
               child: const Center(
-                child: AdBannerWidget(),
+                child: SizedBox.shrink(), // Removido AdMob
               ),
             ),
           ),

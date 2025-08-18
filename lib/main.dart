@@ -9,20 +9,8 @@ import 'overlays/game_over_menu.dart';
 import 'overlays/mobile_controls.dart';
 import 'overlays/advanced_touch_controls.dart';
 import 'l10n/app_localizations.dart';
-import 'services/ad_service.dart';
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
-  // Inicializar AdMob
-  await AdService.initialize();
-  print('💰 [SNAPRIX] Monetização inicializada!');
-  
-  // Carregar anúncios iniciais
-  final adService = AdService();
-  adService.loadBannerAd();
-  adService.loadInterstitialAd();
-  adService.loadRewardedAd();
   
   final game = TetrisGame();
   runApp(

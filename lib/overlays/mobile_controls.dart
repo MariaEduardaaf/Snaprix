@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../game/tetris_game.dart';
-import 'ad_banner.dart';
 
 class MobileControls extends StatefulWidget {
   final TetrisGame game;
@@ -91,20 +90,6 @@ class _MobileControlsState extends State<MobileControls> {
           ),
         ),
         
-        // Banner publicitário na parte inferior
-        Positioned(
-          bottom: 0,
-          left: 0,
-          right: 0,
-          child: SafeArea(
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              child: const Center(
-                child: AdBannerWidget(),
-              ),
-            ),
-          ),
-        ),
       ],
     );
   }
