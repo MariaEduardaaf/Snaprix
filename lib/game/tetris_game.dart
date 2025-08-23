@@ -127,11 +127,11 @@ class TetrisGame extends FlameGame with HasKeyboardHandlerComponents, HasCollisi
     // Usa o menor para manter proporção mas MAXIMIZA o espaço
     cellSize = min(cellSizeByWidth, cellSizeByHeight);
     
-    // Tamanho mínimo AUMENTADO para blocos maiores
-    cellSize = max(cellSize, 38.0);
+    // Tamanho mínimo um pouco menor
+    cellSize = max(cellSize, 32.0);
     
-    // Tamanho máximo MUITO MAIOR - tabuleiro GIGANTE
-    cellSize = min(cellSize, 55.0);
+    // Tamanho máximo reduzido para ficar mais compacto
+    cellSize = min(cellSize, 48.0);
     
     print('🎯 [SNAPRIX] LAYOUT REVOLUCIONÁRIO - Célula: ${cellSize.toStringAsFixed(1)}px');
     print('📱 [SNAPRIX] Tela: ${screenWidth.toInt()}x${screenHeight.toInt()}');

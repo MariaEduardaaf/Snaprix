@@ -34,16 +34,24 @@ void main() async {
         Locale('ja'), // Japanese
         Locale('ar'), // Arabic
       ],
-      home: GameWidget<TetrisGame>.controlled(
-        gameFactory: () => game,
-        overlayBuilderMap: {
-          'MainMenu': (_, game) => MainMenu(game: game),
-          'PauseMenu': (_, game) => PauseMenu(game: game),
-          'GameOver': (_, game) => GameOverMenu(game: game),
-          'MobileControls': (_, game) => MobileControls(game: game),
-          'AdvancedTouchControls': (_, game) => AdvancedTouchControls(game: game),
-        },
-        initialActiveOverlays: const ['MainMenu'],
+      // CORREÇÃO: SafeArea para iOS - protege contra notch e indicators
+      home: SafeArea(
+        // Protege todas as bordas em diferentes orientações
+        top: true,    // Protege contra notch/Dynamic Island
+        bottom: true, // Protege contra home indicator
+        left: true,   // Protege contra bordas em paisagem
+        right: true,  // Protege contra bordas em paisagem
+        child: GameWidget<TetrisGame>.controlled(
+          gameFactory: () => game,
+          overlayBuilderMap: {
+            'MainMenu': (_, game) => MainMenu(game: game),
+            'PauseMenu': (_, game) => PauseMenu(game: game),
+            'GameOver': (_, game) => GameOverMenu(game: game),
+            'MobileControls': (_, game) => MobileControls(game: game),
+            'AdvancedTouchControls': (_, game) => AdvancedTouchControls(game: game),
+          },
+          initialActiveOverlays: const ['MainMenu'],
+        ),
       ),
       debugShowCheckedModeBanner: false,
     ),

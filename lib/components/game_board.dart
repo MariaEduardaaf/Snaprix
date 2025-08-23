@@ -137,11 +137,17 @@ class GameBoard extends PositionComponent {
 class GridLines extends Component {
   @override
   void render(Canvas canvas) {
+    // CORREÇÃO: Adiciona margem extra para garantir que bordas não sejam cortadas
+    final boardWidth = GameConstants.columns * GameConstants.cellSize;
+    final boardHeight = GameConstants.rows * GameConstants.cellSize;
+    final margin = 2.0; // Margem de segurança
+    
+    // Canvas expandido para garantir que bordas apareçam completamente
     final boardRect = Rect.fromLTWH(
-      0, 
-      0, 
-      GameConstants.columns * GameConstants.cellSize, 
-      GameConstants.rows * GameConstants.cellSize
+      -margin, 
+      -margin, 
+      boardWidth + (margin * 2), 
+      boardHeight + (margin * 2)
     );
     
     // Fundo do tabuleiro com gradiente sutil
@@ -164,12 +170,12 @@ class GridLines extends Component {
       backgroundPaint,
     );
     
-    // Borda externa do tabuleiro com margem interna
+    // CORREÇÃO: Borda externa completa - sem margin interna que corta bordas
     final borderRect = Rect.fromLTWH(
-      2, 
-      2, 
-      GameConstants.columns * GameConstants.cellSize - 4, 
-      GameConstants.rows * GameConstants.cellSize - 4
+      0, 
+      0, 
+      boardWidth, 
+      boardHeight
     );
     
     final borderPaint = Paint()
@@ -191,27 +197,59 @@ class GridLines extends Component {
       ..color = const Color(0xFF00FFFF).withValues(alpha: 0.1)
       ..strokeWidth = 0.8;
     
-    // Linhas verticais
+    // CORREÇÃO: Linhas verticais - desenha todas as linhas internas (exceto bordas)
     for (int col = 1; col < GameConstants.columns; col++) {
       final x = col * GameConstants.cellSize;
       final paint = (col % 5 == 0) ? accentGridPaint : gridPaint;
       canvas.drawLine(
         Offset(x, 0),
-        Offset(x, GameConstants.rows * GameConstants.cellSize),
+        Offset(x, boardHeight), // CORREÇÃO: Usa boardHeight em vez de cálculo
         paint,
       );
     }
     
-    // Linhas horizontais
-    for (int row = 1; row < GameConstants.rows; row++) {
+    // CORREÇÃO: Linhas horizontais - INCLUINDO a linha inferior (row <= GameConstants.rows)
+    for (int row = 1; row <= GameConstants.rows; row++) {
       final y = row * GameConstants.cellSize;
       final paint = (row % 5 == 0) ? accentGridPaint : gridPaint;
       canvas.drawLine(
         Offset(0, y),
-        Offset(GameConstants.columns * GameConstants.cellSize, y),
+        Offset(boardWidth, y), // CORREÇÃO: Usa boardWidth em vez de cálculo
         paint,
       );
     }
+    
+    // CORREÇÃO: Desenha bordas superior e inferior explicitamente
+    final borderLinePaint = Paint()
+      ..color = const Color(0xFF00FFFF).withValues(alpha: 0.3)
+      ..strokeWidth = 1.0;
+    
+    // Borda superior
+    canvas.drawLine(
+      const Offset(0, 0),
+      Offset(boardWidth, 0),
+      borderLinePaint,
+    );
+    
+    // Borda inferior - GARANTINDO que seja visível
+    canvas.drawLine(
+      Offset(0, boardHeight),
+      Offset(boardWidth, boardHeight),
+      borderLinePaint,
+    );
+    
+    // Bordas laterais
+    canvas.drawLine(
+      const Offset(0, 0),
+      Offset(0, boardHeight),
+      borderLinePaint,
+    );
+    
+    canvas.drawLine(
+      Offset(boardWidth, 0),
+      Offset(boardWidth, boardHeight),
+      borderLinePaint,
+    );
     
     // Linhas de destaque a cada 5 células para melhor orientação
     final highlightPaint = Paint()
@@ -222,7 +260,7 @@ class GridLines extends Component {
     final centerX = (GameConstants.columns / 2).floor() * GameConstants.cellSize;
     canvas.drawLine(
       Offset(centerX, 0),
-      Offset(centerX, GameConstants.rows * GameConstants.cellSize),
+      Offset(centerX, boardHeight),
       highlightPaint,
     );
   }

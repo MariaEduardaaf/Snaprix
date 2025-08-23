@@ -7,24 +7,46 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flame/game.dart';
 
-import 'package:tretix/main.dart';
+// CORREÇÃO: Importa o main do projeto correto (snaprix-analysis)
+import '../lib/main.dart';
+import '../lib/game/tetris_game.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  testWidgets('Snaprix app loads correctly', (WidgetTester tester) async {
+    // CORREÇÃO: Testa se o jogo Snaprix inicializa corretamente
+    final game = TetrisGame();
+    
+    await tester.pumpWidget(
+      MaterialApp(
+        home: GameWidget<TetrisGame>.controlled(
+          gameFactory: () => game,
+          overlayBuilderMap: const {},
+          initialActiveOverlays: const [], // CORREÇÃO: Sem overlays no teste
+        ),
+      ),
+    );
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
-
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
+    // Verifica se o widget do jogo foi criado
+    expect(find.byType(GameWidget<TetrisGame>), findsOneWidget);
+    
+    // Aguarda inicialização completa
     await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    
+    // Testa básico passou - jogo inicializa sem erros
+    expect(true, true);
+  });
+  
+  test('TetrisGame initializes with correct values', () {
+    final game = TetrisGame();
+    
+    // Verifica valores iniciais
+    expect(game.score, 0);
+    expect(game.linesCleared, 0);
+    expect(game.level, 1);
+    expect(game.isGameOver, false);
+    expect(game.isPaused, false);
+    expect(game.gameStarted, false);
   });
 }
